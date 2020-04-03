@@ -1561,17 +1561,21 @@ __host__ cudaError_t CUDARTAPI cudaLaunch( const char *hostFun )
 		for (int i=0;i<gpu->resume_CTA;i++)
 			grid->increment_cta_id();
 	}
+	
 	if(gpu->resume_option==1 && (grid->get_uid()<gpu->resume_kernel))
 	{
+	
 		char f1name[2048];
-	    snprintf(f1name,2048,"checkpoint_files/global_mem_%d.txt", grid->get_uid());
+	    snprintf(f1name,2048,"checkpoint_files/global_mem_%d.txt", gpu->resume_kernel - 1);
 
 	    g_checkpoint->load_global_mem(global_mem, f1name);	
 		printf("Skipping kernel %d as resuming from kernel %d\n",grid->get_uid(),gpu->resume_kernel );
+
 		g_cuda_launch_stack.pop_back();
 		return g_last_cudaError = cudaSuccess;
 		
 	}
+	
 	if(gpu->checkpoint_option==1 && (grid->get_uid()>gpu->checkpoint_kernel))
 	{
 		printf("Skipping kernel %d as checkpoint from kernel %d\n",grid->get_uid(),gpu->checkpoint_kernel );
@@ -3157,6 +3161,44 @@ size_t getMaxThreadsPerBlock(struct cudaFuncAttributes *attr) {
 
   return max;
 }
+
+cudaError_t CUDARTAPI cudaFuncSetAttribute(const char *hostFun, struct cudaFuncAttributes *attr, int value )
+{
+    if(g_debug_execution >= 3){
+	    announce_call(__my_func__);
+    }
+
+/*
+    CUctx_st *context = GPGPUSim_Context();
+	function_info *entry = context->get_kernel(hostFun);
+	if( entry ) {
+		const struct gpgpu_ptx_sim_info *kinfo = entry->get_kernel_info();
+		switch (attr->) {
+          case cudaFuncAttributeMaxDynamicSharedMemorySize:
+		    attr->sharedSizeBytes = value;
+		    break;
+		  default:
+	        printf("WARNING: cudaFuncSetAttribute has not been implemented yet for case %d.\n", );
+		}
+*/
+    	        printf("WARNING: cudaFuncSetAttribute has not been implemented yet.\n");
+    return g_last_cudaError = cudaSuccess;
+}
+
+cudaError_t CUDARTAPI cudaProfilerStart ( void ){
+
+ printf("WARNING: cudaProfilerStart has not been implemented yet.\n");
+    return g_last_cudaError = cudaSuccess;
+
+}
+
+cudaError_t CUDARTAPI cudaProfilerStop ( void ){
+
+ printf("WARNING: cudaProfilerStop has not been implemented yet.\n");
+    return g_last_cudaError = cudaSuccess;
+
+}
+
 
 cudaError_t CUDARTAPI cudaFuncGetAttributes(struct cudaFuncAttributes *attr, const char *hostFun )
 {

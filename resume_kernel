@@ -1,0 +1,141 @@
+libcuda/Makefile:# THIS IS A LEGAL DOCUMENT BY DOWNLOADING GPGPU-SIM, YOU ARE AGREEING TO THESE
+libcuda/Makefile:# Using this version of GPGPU-Sim requires a complete installation of CUDA 
+libcuda/Makefile:# conditions.  To use this version of GPGPU-Sim with OpenCL requires a
+libcuda/Makefile:# 4. This version of GPGPU-SIM is distributed freely for non-commercial use only.  
+libcuda/Makefile:# 6. GPGPU-SIM was developed primarily by Tor M. Aamodt, Wilson W. L. Fung, 
+libcuda/cuda_runtime_api.cc: * THIS IS A LEGAL DOCUMENT BY DOWNLOADING GPGPU-SIM, YOU ARE AGREEING TO THESE
+libcuda/cuda_runtime_api.cc: * Using this version of GPGPU-Sim requires a complete installation of CUDA 
+libcuda/cuda_runtime_api.cc: * conditions.  To use this version of GPGPU-Sim with OpenCL requires a
+libcuda/cuda_runtime_api.cc: * 4. This version of GPGPU-SIM is distributed freely for non-commercial use only.  
+libcuda/cuda_runtime_api.cc: * 6. GPGPU-SIM was developed primarily by Tor M. Aamodt, Wilson W. L. Fung, 
+libcuda/cuda_runtime_api.cc:#include "../src/gpgpu-sim/gpu-sim.h"
+libcuda/cuda_runtime_api.cc:	unsigned num_shader() const { return m_gpgpu->get_config().num_shader(); }
+libcuda/cuda_runtime_api.cc:		return m_gpgpu->get_prop();
+libcuda/cuda_runtime_api.cc:		snprintf(prop->name,256,"GPGPU-Sim_v%s", g_gpgpusim_version_string );
+libcuda/cuda_runtime_api.cc:		prop->major = the_gpu->compute_capability_major();
+libcuda/cuda_runtime_api.cc:		prop->minor = the_gpu->compute_capability_minor();
+libcuda/cuda_runtime_api.cc:	        prop->sharedMemPerBlock = the_gpu->shared_mem_per_block();
+libcuda/cuda_runtime_api.cc:		prop->regsPerMultiprocessor = the_gpu->num_registers_per_core();
+libcuda/cuda_runtime_api.cc:  	        prop->sharedMemPerMultiprocessor = the_gpu->shared_mem_size();
+libcuda/cuda_runtime_api.cc:		prop->sharedMemPerBlock = the_gpu->shared_mem_per_block();
+libcuda/cuda_runtime_api.cc:		prop->regsPerBlock = the_gpu->num_registers_per_core();
+libcuda/cuda_runtime_api.cc:		prop->warpSize = the_gpu->wrp_size();
+libcuda/cuda_runtime_api.cc:		prop->clockRate = the_gpu->shader_clock();
+libcuda/cuda_runtime_api.cc:		prop->multiProcessorCount = the_gpu->get_config().num_shader();
+libcuda/cuda_runtime_api.cc:		prop->maxThreadsPerMultiProcessor = the_gpu->threads_per_core();
+libcuda/cuda_runtime_api.cc:		the_gpu->set_prop(prop);
+libcuda/cuda_runtime_api.cc:	printf("\n\nGPGPU-Sim PTX: Execution error: CUDA API function \"%s()\" has not been implemented yet.\n"
+libcuda/cuda_runtime_api.cc:	printf("\n\nGPGPU-Sim PTX: CUDA API function \"%s\" has been called.\n", func);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim CUDA API: %s\n", buf);
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMallocing %zu bytes starting at 0x%llx..\n",size, (unsigned long long) *devPtr);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: cudaMallocPitch (width = %d)\n", malloc_width_inbytes);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: cudaMallocArray: devPtr32 = %d\n", ((*array)->devPtr32));
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMemcpy(): devPtr = %p\n", dst);
+libcuda/cuda_runtime_api.cc:				printf("GPGPU-Sim PTX: cudaMemcpy - ERROR : unsupported transfer: host to host\n");
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMemcpy - ERROR : unsupported cudaMemcpyKind\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: cudaMemcpyToArray\n");
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_to_gpu( (size_t)(dst->devPtr), src, size);
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_from_gpu( dst->devPtr, (size_t)src, size);
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_gpu_to_gpu( (size_t)(dst->devPtr), (size_t)src, size);
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMemcpyToArray - ERROR : unsupported cudaMemcpyKind\n");
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_to_gpu( (size_t)dst, src, size );
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_from_gpu( dst, (size_t)src, size );
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_gpu_to_gpu( (size_t)dst, (size_t)src, size);
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMemcpy2D - ERROR : unsupported cudaMemcpyKind\n");
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_to_gpu( (size_t)(dst->devPtr), src, size);
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_from_gpu( dst->devPtr, (size_t)src, size);
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_gpu_to_gpu( (size_t)dst->devPtr, (size_t)src, size);
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMemcpy2D - ERROR : unsupported cudaMemcpyKind\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: cudaMemcpyToSymbol: symbol = %p\n", symbol);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: cudaMemcpyFromSymbol: symbol = %p\n", symbol);
+libcuda/cuda_runtime_api.cc:	gpu->gpu_memset((size_t)mem, c, count);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: WARNING: Asynchronous memset not supported (%s)\n", __my_func__);
+libcuda/cuda_runtime_api.cc:	gpu->gpu_memset((size_t)mem, c, count);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: in cudaBindTexture: sizeof(struct textureReference) = %zu\n", sizeof(struct textureReference));
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   size = %zu\n", size);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   texref = %p, array = %p\n", texref, array);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   devPtr32 = %x\n", array->devPtr32);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   Name corresponding to textureReference: %s\n", gpu->gpgpu_ptx_sim_findNamefromTexture(texref));
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   ChannelFormatDesc: x=%d, y=%d, z=%d, w=%d\n", desc->x, desc->y, desc->z, desc->w);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   Texture Normalized? = %d\n", texref->normalized);
+libcuda/cuda_runtime_api.cc:	gpu->gpgpu_ptx_sim_bindTextureToArray(texref, array);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: devPtr = %p\n", devPtr);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: in cudaBindTextureToArray: %p %p\n", texref, array);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   devPtr32 = %x\n", array->devPtr32);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   Name corresponding to textureReference: %s\n", gpu->gpgpu_ptx_sim_findNamefromTexture(texref));
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   Texture Normalized? = %d\n", texref->normalized);
+libcuda/cuda_runtime_api.cc:	gpu->gpgpu_ptx_sim_bindTextureToArray(texref, array);
+libcuda/cuda_runtime_api.cc:   printf("GPGPU-Sim PTX: in cudaUnbindTexture: sizeof(struct textureReference) = %zu\n", sizeof(struct textureReference));
+libcuda/cuda_runtime_api.cc:   printf("GPGPU-Sim PTX:   Name corresponding to textureReference: %s\n", gpu->gpgpu_ptx_sim_findNamefromTexture(texref));
+libcuda/cuda_runtime_api.cc:   gpu->gpgpu_ptx_sim_unbindTexture(texref);
+libcuda/cuda_runtime_api.cc:	snprintf(buf,1024,"<<GPGPU-Sim PTX: there was an error (code = %d)>>", g_last_cudaError);
+libcuda/cuda_runtime_api.cc:* pushing more than 1 configuration without popping is currently not implemented in GPGPU-Sim and will result in an assert error
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: Setting up arguments for %zu bytes starting at 0x%llx..\n",size, (unsigned long long) arg);
+libcuda/cuda_runtime_api.cc:	printf("\nGPGPU-Sim PTX: cudaLaunch for 0x%p (mode=%s) on stream %u\n", hostFun,
+libcuda/cuda_runtime_api.cc:    		printf("GPGPU-Sim PTX: PDOM analysis already done for %s \n", kname.c_str() );
+libcuda/cuda_runtime_api.cc:    		printf("GPGPU-Sim PTX: finding reconvergence points for \'%s\'...\n", kname.c_str() );
+libcuda/cuda_runtime_api.cc:	global_mem = gpu->get_global_memory();
+libcuda/cuda_runtime_api.cc:	if(gpu->resume_option ==1 && (grid->get_uid()==gpu->resume_kernel))
+libcuda/cuda_runtime_api.cc:		for (int i=0;i<gpu->resume_CTA;i++)
+libcuda/cuda_runtime_api.cc:	if(gpu->resume_option==1 && (grid->get_uid()<gpu->resume_kernel))
+libcuda/cuda_runtime_api.cc:	    snprintf(f1name,2048,"checkpoint_files/global_mem_%d.txt", gpu->resume_kernel - 1);
+libcuda/cuda_runtime_api.cc:		printf("Skipping kernel %d as resuming from kernel %d\n",grid->get_uid(),gpu->resume_kernel );
+libcuda/cuda_runtime_api.cc:	if(gpu->checkpoint_option==1 && (grid->get_uid()>gpu->checkpoint_kernel))
+libcuda/cuda_runtime_api.cc:		printf("Skipping kernel %d as checkpoint from kernel %d\n",grid->get_uid(),gpu->checkpoint_kernel );
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: pushing kernel \'%s\' to stream %u, gridDim= (%u,%u,%u) blockDim = (%u,%u,%u) \n",
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: cudaStreamCreate\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: WARNING: Asynchronous kernel execution not supported (%s)\n", __my_func__);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: WARNING: Asynchronous kernel execution not supported (%s)\n", __my_func__);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: WARNING: Asynchronous kernel execution not supported (%s)\n", __my_func__);
+libcuda/cuda_runtime_api.cc:      printf("GPGPU-Sim API: Error at cudaStreamWaitEvent. Event is not created .\n");
+libcuda/cuda_runtime_api.cc:      printf("GPGPU-Sim API: Warning: cudaEventRecord has not been called on event before calling cudaStreamWaitEvent.\nNothing to be done.\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim API: cudaEventSynchronize ** waiting for event\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim API: cudaEventSynchronize ** event detected\n");
+libcuda/cuda_runtime_api.cc://! GPGPU-Sim process before calling cuobjdump to extract PTX/SASS.  This is
+libcuda/cuda_runtime_api.cc:	   printf("GPGPU-Sim ** ERROR: _NSGetExecutablePath input buffer too small\n");
+libcuda/cuda_runtime_api.cc:        printf("GPGPU-Sim PTX: overriding cuobjdump with '%s' (CUOBJDUMP_SIM_FILE is set)\n", override_cuobjdump);
+libcuda/cuda_runtime_api.cc:			printf("GPGPU-Sim: WARNING: Capability >= 20 are not supported in PTXPlus\n\tSetting forced_max_capability to 19\n");
+libcuda/cuda_runtime_api.cc:          printf("GPGPU-Sim PTX: Parsing %s\n",ptx_filename.c_str());
+libcuda/cuda_runtime_api.cc:          printf("GPGPU-Sim PTX: Loading PTXInfo from %s\n",ptx_filename.c_str());
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: overriding embedded ptx with '%s' (PTX_SIM_USE_PTX_FILE is set)\n", override_ptx_name);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: ERROR ** this version of GPGPU-Sim requires CUDA 2.1 or higher\n");
+libcuda/cuda_runtime_api.cc:			printf("GPGPU-Sim PTX: FatBin file name extraction has not been tested on 32-bit system.\n"); 
+libcuda/cuda_runtime_api.cc:        // Making this a runtime variable based on the app, enables GPGPU-Sim compiled
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: __cudaRegisterFatBinary, fat_cubin_handle = %llu, filename=%s\n", fat_cubin_handle, filename);
+libcuda/cuda_runtime_api.cc:			printf("GPGPU-Sim PTX: __cudaRegisterFatBinary found PTX versions for '%s', ", info->ident);
+libcuda/cuda_runtime_api.cc:			printf("GPGPU-Sim PTX: Loading PTX for %s, capability = %s\n",
+libcuda/cuda_runtime_api.cc:				printf("GPGPU-Sim PTX: ERROR ** PTXPlus is only supported through cuobjdump\n"
+libcuda/cuda_runtime_api.cc:			printf("GPGPU-Sim PTX: warning -- did not find an appropriate PTX in cubin\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: __cudaRegisterFunction %s : hostFun 0x%p, fat_cubin_handle = %u\n",
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: __cudaRegisterVar: hostVar = %p; deviceAddress = %s; deviceName = %s\n", hostVar, deviceAddress, deviceName);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: __cudaRegisterVar: Registering const memory space of %d bytes\n", size);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: __cudaRegisterShared\n" );
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: __cudaRegisterSharedVar\n" );
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: in __cudaRegisterTexture:\n");
+libcuda/cuda_runtime_api.cc:	gpu->gpgpu_ptx_sim_bindNameToTexture(devStr.data(), hostVar, dim, norm, ext);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   int dim = %d\n", dim);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   int norm = %d\n", norm);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   int ext = %d\n", ext);
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX:   Execution warning: Not finished implementing \"%s\"\n", __my_func__ );
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: Execution warning: ignoring call to \"%s\"\n", __my_func__ );
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaGLMapBufferObject %zu bytes starting at 0x%llx..\n", (size_t)buffer_size,
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: GPGPU-Sim support for OpenGL integration disabled -- exiting\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: support for OpenGL integration disabled -- exiting\n");
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: Execution warning: ignoring call to \"%s\"\n", __my_func__ );
+libcuda/cuda_runtime_api.cc:	*pDevice = gpu->gpu_malloc(size);
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: cudaMallocing %zu bytes starting at 0x%llx..\n",size, (unsigned long long) *pDevice);
+libcuda/cuda_runtime_api.cc:		gpu->memcpy_to_gpu((size_t)*pDevice,pHost,size);
+libcuda/cuda_runtime_api.cc:    // This flag is implicitly always on (unless you are using the driver API). It is safe for GPGPU-Sim to
+libcuda/cuda_runtime_api.cc:	printf("GPGPU-Sim PTX: Execution warning: ignoring call to \"%s\"\n", __my_func__ );
+libcuda/cuda_runtime_api.cc:	printf( "GPGPU-Sim PTX: loading globals with explicit initializers... \n" );
+libcuda/cuda_runtime_api.cc:			printf( "GPGPU-Sim PTX:     initializing '%s' ... ", global->name().c_str() );
+libcuda/cuda_runtime_api.cc:				gpu->get_global_memory()->write(addr+offset,nbytes,&value,NULL,NULL); // assuming little endian here
+libcuda/cuda_runtime_api.cc:	printf( "GPGPU-Sim PTX: finished loading globals (%u bytes total).\n", ng_bytes );
+libcuda/cuda_runtime_api.cc:	printf( "GPGPU-Sim PTX: loading constants with explicit initializers... " );
+libcuda/cuda_runtime_api.cc:				gpu->get_global_memory()->write(addr,nbytes,&value,NULL,NULL); // assume little endian (so u8 is the first byte in u32)
+libcuda/cuda_runtime_api.cc:	kernel_info_t *result = new kernel_info_t(gridDim,blockDim,entry,gpu->getNameArrayMapping(),gpu->getNameInfoMapping());
+libcuda/cuda_runtime_api.cc:		printf("GPGPU-Sim PTX: ERROR launching kernel -- no PTX implementation found for %p\n", hostFun);
+libcuda/cuda_runtime_api.cc:    strcpy(name, "GPGPU-Sim");
+libcuda/cuda_runtime_api.cc:        printf("GPGPU-Sim PTX: ERROR: cuLinkAddFile does not support multiple files\n");
+libcuda/cuda_runtime_api.cc:        printf("GPGPU-Sim PTX: ERROR: PTX_JIT_PATH has not been set\n");
+libcuda/cuda_runtime_api.cc:	    printf("GPGPU-Sim CUDA DRIVER API: ERROR: Currently do not support void** extra.\n");
