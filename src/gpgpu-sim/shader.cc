@@ -465,7 +465,7 @@ void shader_core_ctx::init_warps( unsigned cta_id, unsigned start_thread, unsign
                { 
                 char fname[2048];
                 snprintf(fname,2048,"checkpoint_files/warp_%d_%d_simt.txt",i%warp_per_cta,ctaid );
-                unsigned pc,rpc;
+                addr_t pc,rpc;
                 m_simt_stack[i]->resume(fname);
                 m_simt_stack[i]->get_pdom_stack_top_info(&pc,&rpc);
                 for (unsigned t = 0; t < m_config->warp_size; t++) {
@@ -494,13 +494,13 @@ address_type shader_core_ctx::next_pc( int tid ) const
     return the_thread->get_pc(); // PC should already be updatd to next PC at this point (was set in shader_decode() last time thread ran)
 }
 
-void gpgpu_sim::get_pdom_stack_top_info( unsigned sid, unsigned tid, unsigned *pc, unsigned *rpc )
+void gpgpu_sim::get_pdom_stack_top_info( unsigned sid, unsigned tid, addr_t *pc, addr_t *rpc )
 {
     unsigned cluster_id = m_shader_config->sid_to_cluster(sid);
     m_cluster[cluster_id]->get_pdom_stack_top_info(sid,tid,pc,rpc);
 }
 
-void shader_core_ctx::get_pdom_stack_top_info( unsigned tid, unsigned *pc, unsigned *rpc ) const
+void shader_core_ctx::get_pdom_stack_top_info( unsigned tid, addr_t *pc, addr_t *rpc ) const
 {
     unsigned warp_id = tid/m_config->warp_size;
     m_simt_stack[warp_id]->get_pdom_stack_top_info(pc,rpc);
@@ -730,7 +730,7 @@ void shader_core_ctx::decode()
 {
     if( m_inst_fetch_buffer.m_valid ) {
         // decode 1 or 2 instructions and place them into ibuffer
-        address_type pc = m_inst_fetch_buffer.m_pc;
+         address_type pc = m_inst_fetch_buffer.m_pc;
         const warp_inst_t* pI1 = ptx_fetch_inst(pc);
         m_warp[m_inst_fetch_buffer.m_warp_id].ibuffer_fill(0,pI1);
         m_warp[m_inst_fetch_buffer.m_warp_id].inc_inst_in_pipeline();
@@ -1018,7 +1018,7 @@ void scheduler_unit::cycle()
 
             bool valid = warp(warp_id).ibuffer_next_valid();
             bool warp_inst_issued = false;
-            unsigned pc,rpc;
+            addr_t pc,rpc;
             m_simt_stack[warp_id]->get_pdom_stack_top_info(&pc,&rpc);
             SCHED_DPRINTF( "Warp (warp_id %u, dynamic_warp_id %u) has valid instruction (%s)\n",
                            (*iter)->get_warp_id(), (*iter)->get_dynamic_warp_id(),
@@ -4004,7 +4004,7 @@ void simt_core_cluster::icnt_cycle()
     }
 }
 
-void simt_core_cluster::get_pdom_stack_top_info( unsigned sid, unsigned tid, unsigned *pc, unsigned *rpc ) const
+void simt_core_cluster::get_pdom_stack_top_info( unsigned sid, unsigned tid, addr_t *pc, addr_t *rpc ) const
 {
     unsigned cid = m_config->sid_to_cid(sid);
     m_core[cid]->get_pdom_stack_top_info(tid,pc,rpc);
@@ -4108,7 +4108,7 @@ void shader_core_ctx::checkExecutionStatusAndUpdate(warp_inst_t &inst, unsigned 
 
     // PC-Histogram Update 
     unsigned warp_id = inst.warp_id(); 
-    unsigned pc = inst.pc; 
+    addr_t pc = inst.pc; 
     for (unsigned t = 0; t < m_config->warp_size; t++) {
         if (inst.active(t)) {
             int tid = warp_id * m_config->warp_size + t; 

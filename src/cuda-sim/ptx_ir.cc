@@ -296,7 +296,7 @@ type_info *symbol_table::get_array_type( type_info *base_type, unsigned array_di
    return pt;
 }
 
-void symbol_table::set_label_address( const symbol *label, unsigned addr )
+void symbol_table::set_label_address( const symbol *label, unsigned long long  addr )
 {
    std::map<std::string, symbol *>::iterator i=m_symbols.find(label->name());
    assert( i != m_symbols.end() );
@@ -1357,7 +1357,7 @@ std::string ptx_instruction::to_string() const
    char buf[ STR_SIZE ];
    unsigned used_bytes = 0;
    if( !is_label() ) {
-      used_bytes += snprintf( buf + used_bytes, STR_SIZE - used_bytes, " PC=0x%03x ", m_PC );
+      used_bytes += snprintf( buf + used_bytes, STR_SIZE - used_bytes, " PC=0x%03llu ", m_PC );
    } else {
       used_bytes += snprintf( buf + used_bytes, STR_SIZE - used_bytes, "                " );
    }
@@ -1388,10 +1388,10 @@ function_info::function_info(int entry_point )
    pdom_done = false; //initialize it to false
 }
 
-unsigned function_info::print_insn( unsigned pc, FILE * fp ) const
+unsigned function_info::print_insn( addr_t pc, FILE * fp ) const
 {
    unsigned inst_size=1; // return offset to next instruction or 1 if unknown
-   unsigned index = pc - m_start_PC;
+   addr_t index = pc - m_start_PC;
    char command[1024];
    char buffer[1024];
    memset(command, 0, 1024);
@@ -1405,25 +1405,25 @@ unsigned function_info::print_insn( unsigned pc, FILE * fp ) const
    if ((c=strchr(buffer, '\n')) != NULL) *c = '\0';
    fprintf(fp,"%s",buffer);
    if ( index >= m_instr_mem_size ) {
-      fprintf(fp, "<past last instruction (max pc=%u)>", m_start_PC + m_instr_mem_size - 1 );
+      fprintf(fp, "<past last instruction (max pc=%llu)>", m_start_PC + m_instr_mem_size - 1 );
    } else {
       if ( m_instr_mem[index] != NULL ) {
          m_instr_mem[index]->print_insn(fp);
          inst_size = m_instr_mem[index]->isize;
       } else
-         fprintf(fp, "<no instruction at pc = %u>", pc );
+         fprintf(fp, "<no instruction at pc = %llu>", pc );
    }
    pclose(p);
    return inst_size;
 }
 
-std::string function_info::get_insn_str( unsigned pc ) const
+std::string function_info::get_insn_str( addr_t pc ) const
 {
-   unsigned index = pc - m_start_PC;
+   addr_t index = pc - m_start_PC;
    if ( index >= m_instr_mem_size ) {
       char buff[STR_SIZE];
       buff[STR_SIZE-1] = '\0';
-      snprintf(buff, STR_SIZE, "<past last instruction (max pc=%u)>", m_start_PC + m_instr_mem_size - 1 );
+      snprintf(buff, STR_SIZE, "<past last instruction (max pc=%llu)>", m_start_PC + m_instr_mem_size - 1 );
       return std::string(buff);
    } else {
       if ( m_instr_mem[index] != NULL ) {
@@ -1431,7 +1431,7 @@ std::string function_info::get_insn_str( unsigned pc ) const
       } else {
          char buff[STR_SIZE];
          buff[STR_SIZE-1] = '\0';
-         snprintf(buff, STR_SIZE, "<no instruction at pc = %u>", pc );
+         snprintf(buff, STR_SIZE, "<no instruction at pc = %llu>", pc );
          return std::string(buff);
       }
    }

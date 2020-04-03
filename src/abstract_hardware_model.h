@@ -74,8 +74,8 @@ enum FuncCache
 
 typedef unsigned long long new_addr_type;
 typedef unsigned long long cudaTextureObject_t;
-typedef unsigned address_type;
-typedef unsigned addr_t;
+typedef unsigned long long address_type;
+typedef unsigned long long addr_t;
 
 // the following are operations the timing model can see 
 
@@ -406,7 +406,7 @@ public:
     void update( simt_mask_t &thread_done, addr_vector_t &next_pc, address_type recvg_pc, op_type next_inst_op,unsigned next_inst_size, address_type next_inst_pc );
 
     const simt_mask_t &get_active_mask() const;
-    void     get_pdom_stack_top_info( unsigned *pc, unsigned *rpc ) const;
+    void     get_pdom_stack_top_info( addr_t *pc, addr_t *rpc ) const;
     unsigned get_rp() const;
     void     print(FILE *fp) const;
     void     resume(char * fname) ;
@@ -885,7 +885,7 @@ public:
     bool valid() const { return m_decoded; }
     virtual void print_insn( FILE *fp ) const 
     {
-        fprintf(fp," [inst @ pc=0x%04x] ", pc );
+        fprintf(fp," [inst @ pc=0x%04llu] ", pc );
     }
     bool is_load() const { return (op == LOAD_OP ||op==TENSOR_CORE_LOAD_OP || memory_op == memory_load); }
     bool is_store() const { return (op == STORE_OP ||op==TENSOR_CORE_STORE_OP || memory_op == memory_store); }
@@ -1026,7 +1026,7 @@ public:
 			printf("Printing mem access generated\n");
 			std::list<mem_access_t>::iterator it;	
 			for (it = m_accessq.begin(); it != m_accessq.end(); ++it){
-   				 printf("MEM_TXN_GEN:%s:%x, Size:%d \n",mem_access_type_str(it->get_type()), it->get_addr(),it->get_size());
+   				 printf("MEM_TXN_GEN:%s:%llu, Size:%d \n",mem_access_type_str(it->get_type()), it->get_addr(),it->get_size());
 			}	
 		}
     }   
@@ -1071,7 +1071,7 @@ public:
     // accessors
     virtual void print_insn(FILE *fp) const 
     {
-        fprintf(fp," [inst @ pc=0x%04x] ", pc );
+        fprintf(fp," [inst @ pc=0x%04llu] ", pc );
         for (int i=(int)m_config->warp_size-1; i>=0; i--)
             fprintf(fp, "%c", ((m_warp_active_mask[i])?'1':'0') );
     }
@@ -1231,7 +1231,7 @@ class core_t {
         void initilizeSIMTStack(unsigned warp_count, unsigned warps_size);
         void deleteSIMTStack();
         warp_inst_t getExecuteWarp(unsigned warpId);
-        void get_pdom_stack_top_info( unsigned warpId, unsigned *pc, unsigned *rpc ) const;
+        void get_pdom_stack_top_info( unsigned warpId, addr_t *pc, addr_t *rpc ) const;
         kernel_info_t * get_kernel_info(){ return m_kernel;}
         class ptx_thread_info ** get_thread_info() { return m_thread; }
         unsigned get_warp_size() const { return m_warp_size; }

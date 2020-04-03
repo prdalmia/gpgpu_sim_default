@@ -208,7 +208,7 @@ struct stack_entry {
       m_call_uid = 0;
       m_valid = false;
    }
-   stack_entry( symbol_table *s, function_info *f, unsigned pc, unsigned rpc, const symbol *return_var_src, const symbol *return_var_dst, unsigned call_uid )
+   stack_entry( symbol_table *s, function_info *f, addr_t pc, addr_t rpc, const symbol *return_var_src, const symbol *return_var_dst, unsigned call_uid )
    {
       m_symbol_table=s;
       m_func_info=f;
@@ -223,8 +223,8 @@ struct stack_entry {
    bool m_valid;
    symbol_table  *m_symbol_table;
    function_info *m_func_info;
-   unsigned       m_PC;
-   unsigned       m_RPC;
+   addr_t     m_PC;
+   addr_t      m_RPC;
    const symbol  *m_return_var_src;
    const symbol  *m_return_var_dst;
    unsigned       m_call_uid;
@@ -332,7 +332,7 @@ public:
    {
       return m_func_info; 
    }
-   void print_insn( unsigned pc, FILE * fp ) const;
+   void print_insn( addr_t pc, FILE * fp ) const;
    void set_info( function_info *func );
    unsigned get_uid() const
    {
@@ -384,7 +384,7 @@ public:
    bool is_done() { return m_thread_done;}
    unsigned donecycle() const { return m_cycle_done; }
 
-   unsigned next_instr()
+   addr_t next_instr()
    {
       m_icount++;
       m_branch_taken = false;
@@ -394,18 +394,18 @@ public:
    {
       return m_branch_taken;
    }
-   unsigned get_pc() const
+   addr_t get_pc() const
    {
       return m_PC;
    }
-   void set_npc( unsigned npc )
+   void set_npc( addr_t npc )
    {
       m_NPC = npc;
    }
    void set_npc( const function_info *f );
-   void callstack_push( unsigned npc, unsigned rpc, const symbol *return_var_src, const symbol *return_var_dst, unsigned call_uid );
+   void callstack_push( addr_t npc, addr_t rpc, const symbol *return_var_src, const symbol *return_var_dst, unsigned call_uid );
    bool callstack_pop();
-   void callstack_push_plus( unsigned npc, unsigned rpc, const symbol *return_var_src, const symbol *return_var_dst, unsigned call_uid );
+   void callstack_push_plus( addr_t npc, addr_t rpc, const symbol *return_var_src, const symbol *return_var_dst, unsigned call_uid );
    bool callstack_pop_plus();
    void dump_callstack() const;
    std::string get_location() const;
@@ -413,14 +413,14 @@ public:
    const ptx_instruction *get_inst( addr_t pc ) const;
    bool rpc_updated() const { return m_RPC_updated; }
    bool last_was_call() const { return m_last_was_call; }
-   unsigned get_rpc() const { return m_RPC; }
+   addr_t get_rpc() const { return m_RPC; }
    void clearRPC()
    {
       m_RPC = -1;
       m_RPC_updated = false;
       m_last_was_call = false;
    }
-   unsigned get_return_PC()
+   addr_t get_return_PC()
    {
        return m_callstack.back().m_PC;
    }
@@ -492,9 +492,9 @@ private:
    unsigned m_hw_ctaid;
 
    unsigned m_icount;
-   unsigned m_PC;
-   unsigned m_NPC;
-   unsigned m_RPC;
+   addr_t m_PC;
+   addr_t m_NPC;
+   addr_t m_RPC;
    bool m_RPC_updated;
    bool m_last_was_call;
    unsigned m_cycle_done;

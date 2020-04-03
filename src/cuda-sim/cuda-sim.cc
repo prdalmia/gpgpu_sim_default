@@ -229,8 +229,8 @@ void gpgpu_t::gpgpu_ptx_sim_unbindTexture(const struct textureReference* texref)
    m_NameToTextureInfo.erase(texname);
 }
 
-unsigned g_assemble_code_next_pc=0; 
-std::map<unsigned,function_info*> g_pc_to_finfo;
+addr_t g_assemble_code_next_pc=0; 
+std::map<addr_t,function_info*> g_pc_to_finfo;
 std::vector<ptx_instruction*> function_info::s_g_pc_to_insn;
 
 #define MAX_INST_SIZE 8 /*bytes*/
@@ -293,7 +293,7 @@ void function_info::ptx_assemble()
             abort();
          }
          unsigned index = labels[ target.name() ]; //determine address from name
-         unsigned PC = m_instr_mem[index]->get_PC();
+         addr_t PC = m_instr_mem[index]->get_PC();
          m_symtab->set_label_address( target.get_symbol(), PC );
          target.set_type(label_t);
       }
@@ -509,9 +509,9 @@ void gpgpu_t::gpu_memset( size_t dst_start_addr, int c, size_t count )
 
 void ptx_print_insn( address_type pc, FILE *fp )
 {
-   std::map<unsigned,function_info*>::iterator f = g_pc_to_finfo.find(pc);
+   std::map<addr_t,function_info*>::iterator f = g_pc_to_finfo.find(pc);
    if( f == g_pc_to_finfo.end() ) {
-       fprintf(fp,"<no instruction at address 0x%x>", pc );
+       fprintf(fp,"<no instruction at address 0x%llu>", pc );
        return;
    }
    function_info *finfo = f->second;
@@ -521,12 +521,12 @@ void ptx_print_insn( address_type pc, FILE *fp )
 
 std::string ptx_get_insn_str( address_type pc )
 {
-   std::map<unsigned,function_info*>::iterator f = g_pc_to_finfo.find(pc);
+   std::map<addr_t,function_info*>::iterator f = g_pc_to_finfo.find(pc);
    if( f == g_pc_to_finfo.end() ) {
        #define STR_SIZE 255
        char buff[STR_SIZE];
        buff[STR_SIZE - 1] = '\0';
-       snprintf(buff, STR_SIZE,"<no instruction at address 0x%x>", pc );
+       snprintf(buff, STR_SIZE,"<no instruction at address 0x%llu>", pc );
        return std::string(buff);
    }
    function_info *finfo = f->second;
@@ -1185,7 +1185,7 @@ void function_info::add_param_data( unsigned argn, struct gpgpu_ptx_sim_arg *arg
             abort();     
          }
          unsigned num_bits = 8*args->m_nbytes;
-         printf("GPGPU-Sim PTX: deferred allocation of shared region for \"%s\" from 0x%x to 0x%x (shared memory space)\n",
+         printf("GPGPU-Sim PTX: deferred allocation of shared region for \"%s\" from 0x%llu to 0x%llu (shared memory space)\n",
                 p->name().c_str(),
                 m_symtab->get_shared_next(),
                 m_symtab->get_shared_next() + num_bits/8 );
@@ -1302,7 +1302,7 @@ void function_info::list_param( FILE *fout ) const
       std::string name = p.get_name();
       symbol *param = m_symtab->lookup(name.c_str());
       addr_t param_addr = param->get_address();
-      fprintf(fout, "%s: %#08x\n", name.c_str(), param_addr);
+      fprintf(fout, "%s: %#08llu\n", name.c_str(), param_addr);
    }
    fflush(fout);
 }
@@ -1628,7 +1628,7 @@ void ptx_thread_info::ptx_exec_inst( warp_inst_t &inst, unsigned lane_id)
    if ( ptx_debug_exec_dump_cond<5>(get_uid(), pc) ) {
       dim3 ctaid = get_ctaid();
       dim3 tid = get_tid();
-      printf("%u [thd=%u][i=%u] : ctaid=(%u,%u,%u) tid=(%u,%u,%u) icount=%u [pc=%u] (%s:%u - %s)  [0x%llx]\n", 
+      printf("%u [thd=%u][i=%u] : ctaid=(%u,%u,%u) tid=(%u,%u,%u) icount=%u [pc=%llu] (%s:%u - %s)  [0x%llx]\n", 
              g_ptx_sim_num_insn, 
              get_uid(),
              pI->uid(), ctaid.x,ctaid.y,ctaid.z,tid.x,tid.y,tid.z,
@@ -2079,7 +2079,7 @@ void read_sim_environment_variables()
    if ( dbg_pc && strlen(dbg_pc) ) {
       printf("GPGPU-Sim PTX: printing debug information for instruction with PC = %s\n", dbg_pc );
       fflush(stdout);
-      sscanf(dbg_pc,"%d", &g_debug_pc);
+      sscanf(dbg_pc,"%llu", &g_debug_pc);
    }
 
 #if CUDART_VERSION > 1010
@@ -2296,7 +2296,7 @@ void  functionalCoreSim::createWarp(unsigned warpId)
 
    if(cp_cta_resume==1)
    {
-      unsigned pc,rpc;
+      addr_t pc,rpc;
       m_simt_stack[warpId]->resume(fname);
       m_simt_stack[warpId]->get_pdom_stack_top_info(&pc,&rpc);
       for(int i=warpId*m_warp_size; i<warpId*m_warp_size+m_warp_size;i++){
@@ -2390,7 +2390,7 @@ void functionalCoreSim::executeWarp(unsigned i, bool &allAtBarrier, bool & someO
     if(!m_warpAtBarrier[i]&& m_liveThreadCount[i]>0) allAtBarrier = false;
 }
 
-unsigned translate_pc_to_ptxlineno(unsigned pc)
+unsigned translate_pc_to_ptxlineno(addr_t pc)
 {
    // this function assumes that the kernel fits inside a single PTX file
    // function_info *pFunc = g_func_info; // assume that the current kernel is the one in query
@@ -2585,7 +2585,7 @@ address_type get_converge_point( address_type pc )
    // reconvergence point is the return PC on the call stack in the case the branch has 
    // no immediate postdominator in the function (i.e., due to multiple return points). 
 
-   std::map<unsigned,function_info*>::iterator f=g_pc_to_finfo.find(pc);
+   std::map<addr_t,function_info*>::iterator f=g_pc_to_finfo.find(pc);
    assert( f != g_pc_to_finfo.end() );
    function_info *finfo = f->second;
    rec_pts tmp = find_reconvergence_points(finfo);
