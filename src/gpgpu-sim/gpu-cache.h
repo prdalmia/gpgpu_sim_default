@@ -700,6 +700,11 @@ public:
     	//set new assoc. L1 cache dynamically resized in Volta
     	m_assoc = n;
 	}
+    unsigned get_assoc()
+	{
+    	//set new assoc. L1 cache dynamically resized in Volta
+    	return (m_assoc);
+	}
     unsigned get_nset() const
 	{
 		assert( m_valid );
@@ -717,6 +722,7 @@ public:
     char *m_config_string;
     char *m_config_stringPrefL1;
     char *m_config_stringPrefShared;
+    unsigned additional_cache;
     FuncCache cache_status;
 
 protected:
