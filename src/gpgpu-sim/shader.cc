@@ -2965,7 +2965,7 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
        }
        abort();
     }
-
+/*
     if(adaptive_volta_cache_config && !k.volta_cache_config_set) {
     	//For Volta, we assign the remaining shared memory to L1 cache
     	//For more info, see https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory-7-x
@@ -3003,7 +3003,7 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
 
     	k.volta_cache_config_set = true;
     }
-
+*/
     return result;
 }
 
