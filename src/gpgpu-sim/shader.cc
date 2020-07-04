@@ -2906,7 +2906,6 @@ void shader_core_ctx::display_pipeline(FILE *fout, int print_mem, int mask ) con
    }
 
 }
-
 unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
 {
    unsigned threads_per_cta  = k.threads_per_cta();
@@ -2964,7 +2963,8 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
     	   return 1;
        }
        abort();
-    
+    }
+
     if(adaptive_volta_cache_config && !k.volta_cache_config_set) {
     	//For Volta, we assign the remaining shared memory to L1 cache
     	//For more info, see https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory-7-x
@@ -2987,8 +2987,8 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
     		     m_L1D_config.set_assoc(64); //L1 is 32KB and shd=96KB
     		else
     			assert(0);
-
-        if(m_L1D_config.additional_cache != 0)
+             
+             if(m_L1D_config.additional_cache != 0)
             {
               if(m_L1D_config.additional_cache == 1){ 
               m_L1D_config.set_assoc(m_L1D_config.get_assoc() + 16);
@@ -3004,6 +3004,7 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
 
     return result;
 }
+
 
 void shader_core_config::set_pipeline_latency() {
 
