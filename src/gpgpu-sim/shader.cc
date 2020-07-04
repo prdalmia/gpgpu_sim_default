@@ -2964,8 +2964,7 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
     	   return 1;
        }
        abort();
-    }
-/*
+    
     if(adaptive_volta_cache_config && !k.volta_cache_config_set) {
     	//For Volta, we assign the remaining shared memory to L1 cache
     	//For more info, see https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory-7-x
@@ -2989,7 +2988,7 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
     		else
     			assert(0);
 
-                if(m_L1D_config.additional_cache != 0)
+        if(m_L1D_config.additional_cache != 0)
             {
               if(m_L1D_config.additional_cache == 1){ 
               m_L1D_config.set_assoc(m_L1D_config.get_assoc() + 16);
@@ -2997,13 +2996,12 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
               else 
               m_L1D_config.set_assoc(m_L1D_config.get_assoc()*2);
             }            
-
     		 printf ("GPGPU-Sim: Reconfigure L1 cache in Volta Archi to %uKB\n", m_L1D_config.get_total_size_inKB());
     	}
 
     	k.volta_cache_config_set = true;
     }
-*/
+
     return result;
 }
 
