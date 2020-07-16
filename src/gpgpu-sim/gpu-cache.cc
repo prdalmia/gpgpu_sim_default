@@ -1666,7 +1666,7 @@ l1_cache::access( new_addr_type addr,
                   unsigned time,
                   std::list<cache_event> &events )
 {
-    return data_cache::access( a1669ddr, mf, time, events );
+    return data_cache::access( addr, mf, time, events );
 }
 
 // The l2 cache access function calls the base data_cache access
