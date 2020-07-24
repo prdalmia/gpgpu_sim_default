@@ -1693,6 +1693,9 @@ void ldst_unit::L1_latency_queue_cycle()
 		   bool read_sent = was_read_sent(events);
 
 		   if ( status == HIT ) {
+               if (mf_next->isatomic()){
+                   mf_next->do_atomic();
+               }
 			   assert( !read_sent );
 			   l1_latency_queue[0] = NULL;
 			   if ( mf_next->get_inst().is_load() ) {

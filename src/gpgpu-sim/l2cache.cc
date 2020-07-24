@@ -240,6 +240,9 @@ void memory_partition_unit::dram_cycle()
             int spid = (p + last_issued_partition + 1) % m_config->m_n_sub_partition_per_memory_channel; 
             if (!m_sub_partition[spid]->L2_dram_queue_empty() && can_issue_to_dram(spid)) {
                 mem_fetch *mf = m_sub_partition[spid]->L2_dram_queue_top();
+                if(mf->isatomic()){
+                    printf(" sending DRAM request for atomic at address %x\n", mf->get_addr());
+                }
                 if(m_dram->full(mf->is_write()) )
                 	break;
 
