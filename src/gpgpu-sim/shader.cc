@@ -2314,6 +2314,9 @@ void ldst_unit::cycle()
        mem_fetch *mf = m_response_fifo.front();
        if (mf->get_access_type() == TEXTURE_ACC_R) {
            if (m_L1T->fill_port_free()) {
+                if( (mf->get_addr() & (new_addr_type)(~127)) == 0xca899580 ){
+                       printf("L1 cache Filling Request from core %d for address %x  and is tecture %d type is %d and dram id is %d\n", mf->get_sid() ,mf->get_addr(),  mf->istexture(), mf->get_type(), mf->get_tlx_addr().chip);
+                        }
                m_L1T->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                m_response_fifo.pop_front(); 
            }
@@ -3012,7 +3015,6 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
 
     return result;
 }
-
 
 void shader_core_config::set_pipeline_latency() {
 

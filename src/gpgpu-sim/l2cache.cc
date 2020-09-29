@@ -252,6 +252,10 @@ void memory_partition_unit::dram_cycle()
                 d.req = mf;
                 d.ready_cycle = gpu_sim_cycle+gpu_tot_sim_cycle + m_config->dram_latency;
                 m_dram_latency_queue.push_back(d);
+                if (((mf->get_addr() & (new_addr_type)(~127)) == 0xca899580))
+                        {
+                          printf("DRAM loop core 2 %d for address %x and is atomic %d and type is %d and dram id is %d and partition id is %d\n", mf->get_sid() ,mf->get_addr(), mf->isatomic(), mf->get_type(), mf->get_tlx_addr().chip, spid);
+                        }
                 mf->set_status(IN_PARTITION_DRAM_LATENCY_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
                 m_arbitration_metadata.borrow_credit(spid); 
                 break;  // the DRAM should only accept one request per cycle 
@@ -384,6 +388,9 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
             if (m_L2cache->fill_port_free()) {
                 mf->set_status(IN_PARTITION_L2_FILL_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
                 m_L2cache->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle+m_memcpy_cycle_offset);
+                   if( (mf->get_addr() & (new_addr_type)(~127)) == 0xca899580 ){
+                       printf("Filling Request from core %d for address %x  and memory partition %d and is atomic %d and type is %d and dram id is %d\n", mf->get_sid() ,mf->get_addr(), get_id(), mf->isatomic(), mf->get_type(), mf->get_tlx_addr().chip);
+                        }
                 m_dram_L2_queue->pop();
             }
         } else if ( !m_L2_icnt_queue->full() ) {
@@ -413,7 +420,11 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
                 bool write_sent = was_write_sent(events);
                 bool read_sent = was_read_sent(events);
                 MEM_SUBPART_DPRINTF("Probing L2 cache Address=%llx, status=%u\n", mf->get_addr(), status); 
-
+              if(status == MISS) {
+                   if( (mf->get_addr() & (new_addr_type)(~127)) == 0xca899580 ){
+                       printf("Owner Request from core %d for address %x going to  memory partition %d and is atomic %d and type is %d and dram id is %d\n", mf->get_sid() ,mf->get_addr(),  get_id(), mf->isatomic(), mf->get_type(), mf->get_tlx_addr().chip);
+                        }
+              }
                 if ( status == HIT ) {
                     if( !write_sent ) {
                         // L2 cache replies
