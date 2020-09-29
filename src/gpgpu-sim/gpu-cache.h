@@ -1345,6 +1345,12 @@ public:
         }
     }
 
+    enum cache_request_status
+     data_cache::access( new_addr_type addr,
+                    mem_fetch *mf,
+                    unsigned time,
+                    std::list<cache_event> &events );
+
 
 protected:
     data_cache( const char *name,
