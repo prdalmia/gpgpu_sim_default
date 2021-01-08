@@ -336,6 +336,7 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
 {
     bool wb=false;
     evicted_block_info evicted;
+    //Preyesh: Change this
     enum cache_request_status result = access(addr,time,idx,wb,evicted,mf);
     assert(!wb);
     return result;
@@ -1438,9 +1439,9 @@ data_cache::wr_miss_wa_lazy_fetch_on_read( new_addr_type addr,
 		if(mf->get_access_byte_mask().count() == m_config.get_atom_sz())
 		{
 			block->set_m_readable(true, mf->get_access_sector_mask());
-		} else
-		{
-			block->set_m_readable(false, mf->get_access_sector_mask());
+		//} else
+		//{
+		//	block->set_m_readable(false, mf->get_access_sector_mask());
 		}
 
 		if( m_status != RESERVATION_FAIL ){
@@ -1490,14 +1491,33 @@ data_cache::rd_hit_base( new_addr_type addr,
                          enum cache_request_status status )
 {
     new_addr_type block_addr = m_config.block_addr(addr);
-    m_tag_array->access(block_addr,time,cache_index,mf);
+    bool do_miss = false;
+    bool wb = false;
+    evicted_block_info evicted;
+    //m_tag_array->access(block_addr,time,cache_index,mf);
+    enum cache_request_status status_temp = m_tag_array->access(block_addr,time,cache_index,wb,evicted,mf);
+   
+    if(evicted.m_block_addr != 0 && evicted.m_modified_size != 0){
+        do_miss = true;
+    }
+    
+     if( do_miss ){
+        // If evicted block is modified and not a write-through
+        // (already modified lower level)
+        if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){ 
+            mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                m_wrbk_type,evicted.m_modified_size,true);
+        send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+    }
+    }
     // Atomics treated as global read/write requests - Perform read, mark line as
     // MODIFIED
     if(mf->isatomic()){ 
         assert(mf->get_access_type() == GLOBAL_ACC_R);
         cache_block_t* block = m_tag_array->get_block(cache_index);
         block->set_status(MODIFIED, mf->get_access_sector_mask()) ;  // mark line as dirty
-    }
+       // return status_temp;
+    } 
     return HIT;
 }
 
@@ -1616,9 +1636,18 @@ data_cache::process_tag_probe( bool wr,
                                       cache_index,
                                       mf, time, events, probe_status );
         }else if ( probe_status != RESERVATION_FAIL ) {
+         //Make it such that this code only runs for L1 cache
+         if(mf->isatomic() && mf->isatomicforL1()){
+             access_status = (this->*m_rd_hit)( addr,
+                                      cache_index,
+                                      mf, time, events, probe_status );
+         }
+         else{
+
             access_status = (this->*m_rd_miss)( addr,
                                        cache_index,
                                        mf, time, events, probe_status );
+         }
         }else {
         	//the only reason for reservation fail here is LINE_ALLOC_FAIL (i.e all lines are reserved)
         	m_stats.inc_fail_stats(mf->get_access_type(), LINE_ALLOC_FAIL);

@@ -79,6 +79,7 @@ public:
    const addrdec_t &get_tlx_addr() const { return m_raw_addr; }
    unsigned get_data_size() const { return m_data_size; }
    void     set_data_size( unsigned size ) { m_data_size=size; }
+   void     set_atomic_l1( bool flag ) { m_atomic_l1=flag; }
    unsigned get_ctrl_size() const { return m_ctrl_size; }
    unsigned size() const { return m_data_size+m_ctrl_size; }
    bool is_write() {return m_access.is_write();}
@@ -96,6 +97,7 @@ public:
    bool isconst() const;
    enum mf_type get_type() const { return m_type; }
    bool isatomic() const;
+   bool isatomicforL1() const {return m_atomic_l1;} 
 
    void set_return_timestamp( unsigned t ) { m_timestamp2=t; }
    void set_icnt_receive_time( unsigned t ) { m_icnt_receive_time=t; }
@@ -128,6 +130,7 @@ private:
 
    // where is this request now?
    enum mem_fetch_status m_status;
+   bool m_atomic_l1;
    unsigned long long m_status_change;
 
    // request type, address, size, mask

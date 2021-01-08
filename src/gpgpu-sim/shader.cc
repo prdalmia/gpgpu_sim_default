@@ -1687,18 +1687,22 @@ void ldst_unit::L1_latency_queue_cycle()
     {
 		    mem_fetch* mf_next = l1_latency_queue[0];
 			std::list<cache_event> events;
+            if (mf_next->isatomic()){
+                mf_next->set_atomic_l1(true);
+            }
 			enum cache_request_status status = m_L1D->access(mf_next->get_addr(),mf_next,gpu_sim_cycle+gpu_tot_sim_cycle,events);
 
 		   bool write_sent = was_write_sent(events);
 		   bool read_sent = was_read_sent(events);
 
 		   if ( status == HIT ) {
-               if (mf_next->isatomic()){
-                   mf_next->do_atomic();
-               }
-			   assert( !read_sent );
+                      assert( !read_sent );
 			   l1_latency_queue[0] = NULL;
-			   if ( mf_next->get_inst().is_load() ) {
+               if(mf_next->isatomic()){
+                   mf_next->do_atomic();
+                    m_core->decrement_atomic_count(mf_next->get_wid(),mf_next->get_access_warp_mask().count());
+               }
+			   if ( mf_next->get_inst().is_load() || mf_next->isatomic() ) {
 				   for ( unsigned r=0; r < MAX_OUTPUT_VALUES; r++)
 					   if (mf_next->get_inst().out[r] > 0)
 					   {
@@ -1792,7 +1796,7 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
    const mem_access_t &access = inst.accessq_back();
 
    bool bypassL1D = false; 
-   if ( (CACHE_GLOBAL == inst.cache_op || (m_L1D == NULL)) && inst.isatomic()!= true ) {
+   if ( (CACHE_GLOBAL == inst.cache_op || (m_L1D == NULL)) && (inst.isatomic() != true)) {
        bypassL1D = true; 
    } else if (inst.space.is_global()) { // global memory access 
        // skip L1 cache if the option is enabled
@@ -2256,6 +2260,10 @@ void ldst_unit::writeback()
             if( m_L1D && m_L1D->access_ready() ) {
                 mem_fetch *mf = m_L1D->next_access();
                 m_next_wb = mf->get_inst();
+                if(m_next_wb.isatomic()){
+                    mf->do_atomic();
+                    m_core->decrement_atomic_count(mf->get_wid(),mf->get_access_warp_mask().count());
+                    }
                 delete mf;
                 serviced_client = next_client; 
             }
@@ -2314,9 +2322,6 @@ void ldst_unit::cycle()
        mem_fetch *mf = m_response_fifo.front();
        if (mf->get_access_type() == TEXTURE_ACC_R) {
            if (m_L1T->fill_port_free()) {
-                if( (mf->get_addr() & (new_addr_type)(~127)) == 0xcb3b1d00 ){
-                       printf("L1 cache Filling Request from core %d for address %x  and is tecture %d type is %d and dram id is %d\n", mf->get_sid() ,mf->get_addr(),  mf->istexture(), mf->get_type(), mf->get_tlx_addr().chip);
-                        }
                m_L1T->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                m_response_fifo.pop_front(); 
            }
@@ -2355,7 +2360,7 @@ void ldst_unit::cycle()
                }
            }
        }
-   }
+   }  
 
    m_L1T->cycle();
    m_L1C->cycle();
