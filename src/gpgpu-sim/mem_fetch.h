@@ -84,6 +84,7 @@ public:
    unsigned size() const { return m_data_size+m_ctrl_size; }
    bool is_write() {return m_access.is_write();}
    void set_addr(new_addr_type addr) { m_access.set_addr(addr); }
+   void set_buffered_update() { buffered_update = true; }
    new_addr_type get_addr() const { return m_access.get_addr(); }
    unsigned get_access_size() const { return m_access.get_size(); }
    new_addr_type get_partition_addr() const { return m_partition_addr; }
@@ -97,6 +98,7 @@ public:
    bool isconst() const;
    enum mf_type get_type() const { return m_type; }
    bool isatomic() const;
+   bool isbufferedupdate() const{return buffered_update;}
    bool isatomicforL1() const {return m_atomic_l1;} 
 
    void set_return_timestamp( unsigned t ) { m_timestamp2=t; }
@@ -131,6 +133,7 @@ private:
    // where is this request now?
    enum mem_fetch_status m_status;
    bool m_atomic_l1;
+   bool buffered_update;
    unsigned long long m_status_change;
 
    // request type, address, size, mask

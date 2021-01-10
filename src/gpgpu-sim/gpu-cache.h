@@ -75,13 +75,17 @@ enum cache_event_type {
 struct evicted_block_info {
 	new_addr_type m_block_addr;
 	unsigned m_modified_size;
+    bool buffered_update;
 	evicted_block_info() {
 		m_block_addr = 0;
 		m_modified_size = 0;
+        buffered_update = false;
 	}
-	void set_info(new_addr_type block_addr, unsigned modified_size){
+	void set_info(new_addr_type block_addr, unsigned modified_size, bool bf_update=false){
 		m_block_addr = block_addr;
 		m_modified_size = modified_size;
+        buffered_update = bf_update;
+
 	}
 };
 
@@ -108,7 +112,7 @@ struct cache_block_t {
         m_block_addr=0;
     }
 
-    virtual void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask) = 0;
+    virtual void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask, bool buffered_update = false) = 0;
     virtual void fill( unsigned time, mem_access_sector_mask_t sector_mask) = 0;
 
     virtual bool is_invalid_line() = 0;
@@ -128,6 +132,7 @@ struct cache_block_t {
     virtual void set_m_readable(bool readable, mem_access_sector_mask_t sector_mask)=0;
     virtual bool is_readable(mem_access_sector_mask_t sector_mask)=0;
     virtual void print_status()=0;
+    virtual bool is_buffered_update()=0;
     virtual ~cache_block_t() {}
 
 
@@ -147,7 +152,7 @@ struct line_cache_block: public cache_block_t  {
 	        m_set_modified_on_fill = false;
 	        m_readable = true;
 	    }
-	    void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask)
+	    void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask, bool buffered_update = false)
 	    {
 	        m_tag=tag;
 	        m_block_addr=block_addr;
@@ -155,6 +160,7 @@ struct line_cache_block: public cache_block_t  {
 	        m_last_access_time=time;
 	        m_fill_time=0;
 	        m_status=RESERVED;
+            buffered_update_bit = buffered_update;
 	        m_ignore_on_fill_status = false;
 	        m_set_modified_on_fill = false;
 	    }
@@ -212,6 +218,10 @@ struct line_cache_block: public cache_block_t  {
 		{
 	    	m_set_modified_on_fill = m_modified;
 		}
+     //   virtual void set_buffered_update_bit(bool bf_bit)
+	//	{
+	  //  	buffered_update_bit = bf_bit;
+		//}
 		virtual unsigned  get_modified_size()
 		{
 			return SECTOR_CHUNCK_SIZE * SECTOR_SIZE;   //i.e. cache line size
@@ -223,6 +233,11 @@ struct line_cache_block: public cache_block_t  {
 		virtual bool is_readable(mem_access_sector_mask_t sector_mask) {
 			return m_readable;
 		}
+
+        virtual bool is_buffered_update() {
+			return buffered_update_bit;
+		}
+        
 		virtual void print_status() {
 			 printf("m_block_addr is %llu, status = %u\n", m_block_addr, m_status);
 		}
@@ -235,6 +250,7 @@ private:
 	    cache_block_state    m_status;
 	    bool m_ignore_on_fill_status;
 	    bool m_set_modified_on_fill;
+        bool buffered_update_bit;
 	    bool m_readable;
 };
 
@@ -259,7 +275,7 @@ struct sector_cache_block : public cache_block_t {
 			m_line_fill_time=0;
 	}
 
-	virtual void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask )
+	virtual void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask, bool buffered_update = false )
     {
     	allocate_line( tag,  block_addr,  time, sector_mask );
     }
@@ -404,6 +420,9 @@ struct sector_cache_block : public cache_block_t {
     	unsigned sidx = get_sector_index(sector_mask);
     	return m_readable[sidx];
 	}
+    virtual bool is_buffered_update() {
+			return false;
+		}
 
     virtual unsigned  get_modified_size()
 	{
@@ -812,8 +831,8 @@ public:
     unsigned size() const { return m_config.get_num_lines();}
     cache_block_t* get_block(unsigned idx) { return m_lines[idx];}
 
-    void flush(); // flush all written entries
-    void invalidate(); // invalidate all entries
+    void flush(bool isL1); // flush all written entries
+    void invalidate(bool isL1); // invalidate all entries
     void new_window();
 
     void print( FILE *stream, unsigned &total_access, unsigned &total_misses ) const;
@@ -823,6 +842,7 @@ public:
 	void update_cache_parameters(cache_config &config);
 	void add_pending_line(mem_fetch *mf);
 	void remove_pending_line(mem_fetch *mf);
+    std::list<new_addr_type> flush_list;
 protected:
     // This constructor is intended for use only from derived classes that wish to
     // avoid unnecessary memory allocation that takes place in the
@@ -844,6 +864,7 @@ protected:
     unsigned m_pending_hit; // number of cache miss that hit a line that is allocated but not filled
     unsigned m_res_fail;
     unsigned m_sector_miss;
+
 
     // performance counters for calculating the amount of misses within a time window
     unsigned m_prev_snapshot_access;
@@ -1143,8 +1164,13 @@ public:
     /// Pop next ready access (does not include accesses that "HIT")
     mem_fetch *next_access(){return m_mshrs.next_access();}
     // flash invalidate all entries in cache
-    void flush(){m_tag_array->flush();}
-    void invalidate(){m_tag_array->invalidate();}
+    void flush(bool isL1 = false){m_tag_array->flush(isL1);}
+    void flush(std::list<new_addr_type>& flushl, bool isL1 = false ){m_tag_array->flush(isL1);
+    flushl = m_tag_array->flush_list;
+    m_tag_array->flush_list.clear();
+    }
+
+    void invalidate(bool isL1 = false){m_tag_array->invalidate(isL1);}
     void print(FILE *fp, unsigned &accesses, unsigned &misses) const;
     void display_state( FILE *fp ) const;
 
@@ -1205,6 +1231,7 @@ protected:
     std::list<mem_fetch*> m_miss_queue;
     enum mem_fetch_status m_miss_queue_status;
     mem_fetch_interface *m_memport;
+    std::list<new_addr_type> flush_list;
 
     struct extra_mf_fields {
         extra_mf_fields()  { m_valid = false;}
@@ -1531,7 +1558,15 @@ public:
             : data_cache(name,config,core_id,type_id,memport,mfcreator,status, L1_WR_ALLOC_R, L1_WRBK_ACC){}
 
     virtual ~l1_cache(){}
-
+    
+    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events){
+        mem_fetch *wb = m_memfetch_creator->alloc(addr,
+                GLOBAL_ACC_R,m_config.get_atom_sz(),false);
+                wb->set_buffered_update();
+                send_write_request(wb, READ_REQUEST_SENT, time, events);
+        
+        
+    }
     virtual enum cache_request_status
         access( new_addr_type addr,
                 mem_fetch *mf,

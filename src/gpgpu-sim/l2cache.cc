@@ -430,7 +430,10 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
                     }
                 } else if ( status != RESERVATION_FAIL ) {
                 	if(mf->is_write() && (m_config->m_L2_config.m_write_alloc_policy == FETCH_ON_WRITE || m_config->m_L2_config.m_write_alloc_policy == LAZY_FETCH_ON_READ) && !was_writeallocate_sent(events)) {
-                		mf->set_reply();
+                		if(mf->get_access_type() == L1_WRBK_ACC || mf->get_access_type() == L2_WRBK_ACC ){
+                            printf("This is happeneing for address %x, from core %d, is write %d, is atomic %d is type %d is buffered_update %d and access_type is %d", mf->get_addr(), mf->get_sid(), mf->is_write(), mf->isatomic(), mf->get_type(), mf->isbufferedupdate(), mf->get_access_type());
+                        }
+                        mf->set_reply();
                 		mf->set_status(IN_PARTITION_L2_TO_ICNT_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
                 		m_L2_icnt_queue->push(mf);
                 	}

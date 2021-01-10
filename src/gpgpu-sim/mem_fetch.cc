@@ -61,6 +61,7 @@ mem_fetch::mem_fetch( const mem_access_t &access,
    m_timestamp = gpu_sim_cycle + gpu_tot_sim_cycle;
    m_timestamp2 = 0;
    m_atomic_l1 = false;
+   buffered_update = false; 
    m_status = MEM_FETCH_INITIALIZED;
    m_status_change = gpu_sim_cycle + gpu_tot_sim_cycle;
    m_mem_config = config;

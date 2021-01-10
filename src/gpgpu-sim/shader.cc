@@ -1691,12 +1691,12 @@ void ldst_unit::L1_latency_queue_cycle()
                 mf_next->set_atomic_l1(true);
             }
 			enum cache_request_status status = m_L1D->access(mf_next->get_addr(),mf_next,gpu_sim_cycle+gpu_tot_sim_cycle,events);
-
+        
 		   bool write_sent = was_write_sent(events);
 		   bool read_sent = was_read_sent(events);
 
 		   if ( status == HIT ) {
-                      assert( !read_sent );
+                      //assert( !read_sent );
 			   l1_latency_queue[0] = NULL;
                if(mf_next->isatomic()){
                    mf_next->do_atomic();
@@ -1853,12 +1853,20 @@ void ldst_unit::fill( mem_fetch *mf )
 
 void ldst_unit::flush(){
 	// Flush L1D cache
-	m_L1D->flush();
+    if(!flush_L1D){
+        std::list<new_addr_type> flushlist;
+        std::list<cache_event> events;
+	m_L1D->flush(flushlist, true);
+    for(const new_addr_type& addr: flushlist){
+    m_L1D->wb_request(addr, gpu_tot_sim_cycle+gpu_sim_cycle, events);
+    }
+    flush_L1D = true;
+    }
 }
 
 void ldst_unit::invalidate(){
 	// Flush L1D cache
-	m_L1D->invalidate();
+	m_L1D->invalidate(true);
 }
 
 simd_function_unit::simd_function_unit( const shader_core_config *config )
@@ -2074,6 +2082,7 @@ void ldst_unit::init( mem_fetch_interface *icnt,
     m_stats = stats;
     m_sid = sid;
     m_tpc = tpc;
+    flush_L1D = false;
     #define STRSIZE 1024
     char L1T_name[STRSIZE];
     char L1C_name[STRSIZE];
@@ -2340,7 +2349,7 @@ void ldst_unit::cycle()
                assert( !mf->get_is_write() ); // L1 cache is write evict, allocate line on load miss only
 
                bool bypassL1D = false; 
-               if ( CACHE_GLOBAL == mf->get_inst().cache_op || (m_L1D == NULL) ) {
+               if ( CACHE_GLOBAL == mf->get_inst().cache_op || (m_L1D == NULL) || mf->isbufferedupdate()) {
                    bypassL1D = true; 
                } else if (mf->get_access_type() == GLOBAL_ACC_R || mf->get_access_type() == GLOBAL_ACC_W) { // global memory access 
                    if (m_core->get_config()->gmem_skip_L1D)
@@ -2350,7 +2359,12 @@ void ldst_unit::cycle()
                    if ( m_next_global == NULL ) {
                        mf->set_status(IN_SHADER_FETCHED,gpu_sim_cycle+gpu_tot_sim_cycle);
                        m_response_fifo.pop_front();
+                       if(mf->isbufferedupdate()){
+                       delete mf;
+                       }
+                       else{
                        m_next_global = mf;
+                       }
                    }
                } else {
                    if (m_L1D->fill_port_free()) {

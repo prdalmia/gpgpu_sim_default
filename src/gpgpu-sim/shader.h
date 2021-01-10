@@ -1316,6 +1316,7 @@ protected:
    warp_inst_t m_next_wb;
    unsigned m_writeback_arb; // round-robin arbiter for writeback contention between L1T, L1C, shared
    unsigned m_num_writeback_clients;
+   bool flush_L1D;
 
    enum mem_stage_stall_type m_mem_rc;
 

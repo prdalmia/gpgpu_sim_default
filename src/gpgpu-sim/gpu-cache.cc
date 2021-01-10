@@ -360,9 +360,9 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
         if ( m_config.m_alloc_policy == ON_MISS ) {
             if( m_lines[idx]->is_modified_line()) {
                 wb = true;
-                evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size());
+                evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update());
             }
-            m_lines[idx]->allocate( m_config.tag(addr), m_config.block_addr(addr), time, mf->get_access_sector_mask());
+            m_lines[idx]->allocate( m_config.tag(addr), m_config.block_addr(addr), time, mf->get_access_sector_mask(), mf->isatomicforL1());
         }
         break;
     case SECTOR_MISS:
@@ -414,28 +414,34 @@ void tag_array::fill( unsigned index, unsigned time, mem_fetch* mf)
 
 
 //TODO: we need write back the flushed data to the upper level
-void tag_array::flush() 
+void tag_array::flush(bool isL1) 
 {
-	if(!is_used)
-		return;
+	//if(!is_used)
+	//	return;
 
-    for (unsigned i=0; i < m_config.get_num_lines(); i++)
-    	if(m_lines[i]->is_modified_line()) {
-    	for(unsigned j=0; j < SECTOR_CHUNCK_SIZE; j++)
-    		m_lines[i]->set_status(INVALID, mem_access_sector_mask_t().set(j)) ;
-    	}
+    for (unsigned i = 0; i < m_config.get_num_lines(); i++)
+        if (m_lines[i]->is_modified_line())
+        {
+            if(isL1){
+            flush_list.push_back(m_lines[i]->m_block_addr);
+            }
+            for (unsigned j = 0; j < SECTOR_CHUNCK_SIZE; j++)
+                m_lines[i]->set_status(INVALID, mem_access_sector_mask_t().set(j));
+        }
 
-    is_used = false;
+    //is_used = false;
 }
 
-void tag_array::invalidate()
+void tag_array::invalidate(bool isL1)
 {
 	if(!is_used)
 		return;
 
     for (unsigned i=0; i < m_config.get_num_lines(); i++)
+        if(!(m_lines[i]->is_modified_line() && isL1)){
     	for(unsigned j=0; j < SECTOR_CHUNCK_SIZE; j++)
     		m_lines[i]->set_status(INVALID, mem_access_sector_mask_t().set(j)) ;
+        }
 
     is_used = false;
 }
@@ -1504,10 +1510,18 @@ data_cache::rd_hit_base( new_addr_type addr,
      if( do_miss ){
         // If evicted block is modified and not a write-through
         // (already modified lower level)
-        if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){ 
+        if(wb){ 
+           if(evicted.buffered_update == true){ 
+                mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                mwb->set_buffered_update();
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+           }
+      else{
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,evicted.m_modified_size,true);
         send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+    }
     }
     }
     // Atomics treated as global read/write requests - Perform read, mark line as
@@ -1551,10 +1565,19 @@ data_cache::rd_miss_base( new_addr_type addr,
     if( do_miss ){
         // If evicted block is modified and not a write-through
         // (already modified lower level)
+        // Update buffered updates bit
         if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){ 
+            if(evicted.buffered_update == true){ 
+                mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                mwb->set_buffered_update();
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+           }
+      else{
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,evicted.m_modified_size,true);
         send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+    }
     }
         return MISS;
     }
@@ -1637,13 +1660,12 @@ data_cache::process_tag_probe( bool wr,
                                       mf, time, events, probe_status );
         }else if ( probe_status != RESERVATION_FAIL ) {
          //Make it such that this code only runs for L1 cache
-         if(mf->isatomic() && mf->isatomicforL1()){
+         if(mf->isatomic() && mf->isatomicforL1()){            
              access_status = (this->*m_rd_hit)( addr,
                                       cache_index,
                                       mf, time, events, probe_status );
          }
          else{
-
             access_status = (this->*m_rd_miss)( addr,
                                        cache_index,
                                        mf, time, events, probe_status );
