@@ -1854,11 +1854,11 @@ void ldst_unit::fill( mem_fetch *mf )
 void ldst_unit::flush(){
 	// Flush L1D cache
     if(!flush_L1D){
-        std::list<new_addr_type> flushlist;
+        std::list<std::pair<new_addr_type,bool>> flushlist;
         std::list<cache_event> events;
 	m_L1D->flush(flushlist, true);
-    for(const new_addr_type& addr: flushlist){
-    m_L1D->wb_request(addr, gpu_tot_sim_cycle+gpu_sim_cycle, events);
+    for(const std::pair<new_addr_type,bool>& addr: flushlist){
+    m_L1D->wb_request(addr.first, gpu_tot_sim_cycle+gpu_sim_cycle, events, addr.second);
     }
     flush_L1D = true;
     }

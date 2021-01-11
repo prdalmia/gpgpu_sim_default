@@ -71,7 +71,7 @@
 
 /* Copy the first part of user declarations.  */
 
-#line 75 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:339  */
+#line 75 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -91,8 +91,8 @@
 
 /* In a future release of Bison, this section will be replaced
    by #include "ptxinfo.tab.h".  */
-#ifndef YY_PTXINFO_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
-# define YY_PTXINFO_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
+#ifndef YY_PTXINFO_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
+# define YY_PTXINFO_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -146,7 +146,7 @@ union YYSTYPE
   int    int_value;
   char * string_value;
 
-#line 150 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:355  */
+#line 150 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -159,7 +159,7 @@ extern YYSTYPE ptxinfo_lval;
 
 int ptxinfo_parse (void);
 
-#endif /* !YY_PTXINFO_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUDA_SIM_PTXINFO_TAB_H_INCLUDED  */
+#endif /* !YY_PTXINFO_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUDA_SIM_PTXINFO_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 #line 63 "ptxinfo.y" /* yacc.c:358  */
@@ -181,7 +181,7 @@ int ptxinfo_parse (void);
 	void ptxinfo_linenum( unsigned );
 	void ptxinfo_dup_type( const char* );
 
-#line 185 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:358  */
+#line 185 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1294,113 +1294,113 @@ yyreduce:
         case 6:
 #line 90 "ptxinfo.y" /* yacc.c:1646  */
     { printf("GPGPU-Sim: ptxas %s\n", (yyvsp[0].string_value)); }
-#line 1298 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1298 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 91 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_linenum((yyvsp[-3].int_value)); }
-#line 1304 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1304 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 96 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_addinfo(); }
-#line 1310 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1310 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 100 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_function((yyvsp[-1].string_value)); }
-#line 1316 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1316 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
 #line 101 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_function((yyvsp[-5].string_value)); }
-#line 1322 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1322 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 17:
 #line 111 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_regs((yyvsp[-1].int_value)); }
-#line 1328 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1328 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 18:
 #line 112 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_lmem(g_declared,g_system); }
-#line 1334 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1334 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 19:
 #line 113 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_smem(g_declared,g_system); }
-#line 1340 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1340 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 20:
 #line 114 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_cmem((yyvsp[-5].int_value),(yyvsp[-1].int_value)); }
-#line 1346 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1346 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 21:
 #line 115 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_gmem((yyvsp[-2].int_value),0); }
-#line 1352 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1352 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 22:
 #line 116 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_lmem((yyvsp[-2].int_value),0); }
-#line 1358 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1358 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 23:
 #line 117 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_smem((yyvsp[-2].int_value),0); }
-#line 1364 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1364 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 24:
 #line 118 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_cmem((yyvsp[-2].int_value),0); }
-#line 1370 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1370 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
 #line 119 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_regs((yyvsp[-1].int_value)); }
-#line 1376 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1376 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
 #line 120 "ptxinfo.y" /* yacc.c:1646  */
     {}
-#line 1382 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1382 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 27:
 #line 123 "ptxinfo.y" /* yacc.c:1646  */
     { g_declared=(yyvsp[-3].int_value); g_system=(yyvsp[-1].int_value); }
-#line 1388 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1388 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
 #line 125 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_dup_type((yyvsp[-3].string_value)); }
-#line 1394 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1394 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
   case 29:
 #line 126 "ptxinfo.y" /* yacc.c:1646  */
     { ptxinfo_dup_type((yyvsp[-3].string_value)); }
-#line 1400 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1400 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1404 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
+#line 1404 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/ptxinfo.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

@@ -1,6 +1,6 @@
-#line 2 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
+#line 2 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
 
-#line 4 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
+#line 4 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -503,7 +503,7 @@ extern int config_input(char *, int);
 #undef YY_INPUT
 #define YY_INPUT(b, r, ms) (r = config_input(b, ms))
 
-#line 507 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
+#line 507 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
 
 #define INITIAL 0
 
@@ -726,7 +726,7 @@ YY_DECL
 
    /* Ignore comments and all spaces */
 
-#line 730 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
+#line 730 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -835,7 +835,7 @@ YY_RULE_SETUP
 #line 44 "config.l"
 ECHO;
 	YY_BREAK
-#line 839 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
+#line 839 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/intersim2/lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 

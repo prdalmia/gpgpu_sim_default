@@ -1,6 +1,6 @@
-#line 2 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
+#line 2 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
 
-#line 4 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
+#line 4 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -786,7 +786,7 @@ void elf_error(const char*);
 
 
 
-#line 790 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
+#line 790 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
 
 #define INITIAL 0
 #define cmem 1
@@ -1008,7 +1008,7 @@ YY_DECL
 #line 54 "elf.l"
 
 
-#line 1012 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
+#line 1012 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1222,7 +1222,7 @@ YY_RULE_SETUP
 #line 133 "elf.l"
 ECHO;
 	YY_BREAK
-#line 1226 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
+#line 1226 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/elf_lexer.cc"
 
 	case YY_END_OF_BUFFER:
 		{

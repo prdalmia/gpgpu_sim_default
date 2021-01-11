@@ -1,6 +1,6 @@
-#line 2 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
+#line 2 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
 
-#line 4 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
+#line 4 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -1010,7 +1010,7 @@ void cuobjdump_error(const char*);
 
 
 
-#line 1014 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
+#line 1014 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
 
 #define INITIAL 0
 #define ptxcode 1
@@ -1249,7 +1249,7 @@ YY_DECL
 
 
 
-#line 1253 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
+#line 1253 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1542,7 +1542,7 @@ YY_RULE_SETUP
 #line 158 "cuobjdump.l"
 ECHO;
 	YY_BREAK
-#line 1546 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
+#line 1546 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_lexer.c"
 
 	case YY_END_OF_BUFFER:
 		{

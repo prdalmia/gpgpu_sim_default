@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_CUOBJDUMP_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_LIBCUDA_CUOBJDUMP_PARSER_H_INCLUDED
-# define YY_CUOBJDUMP_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_LIBCUDA_CUOBJDUMP_PARSER_H_INCLUDED
+#ifndef YY_CUOBJDUMP_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_LIBCUDA_CUOBJDUMP_PARSER_H_INCLUDED
+# define YY_CUOBJDUMP_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_LIBCUDA_CUOBJDUMP_PARSER_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
@@ -77,7 +77,7 @@ union YYSTYPE
 
 	char* string_value;
 
-#line 81 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_parser.h" /* yacc.c:1909  */
+#line 81 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/libcuda/cuobjdump_parser.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -90,4 +90,4 @@ extern YYSTYPE cuobjdump_lval;
 
 int cuobjdump_parse (void);
 
-#endif /* !YY_CUOBJDUMP_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_LIBCUDA_CUOBJDUMP_PARSER_H_INCLUDED  */
+#endif /* !YY_CUOBJDUMP_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_LIBCUDA_CUOBJDUMP_PARSER_H_INCLUDED  */

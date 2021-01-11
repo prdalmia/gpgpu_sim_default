@@ -423,7 +423,7 @@ void tag_array::flush(bool isL1)
         if (m_lines[i]->is_modified_line())
         {
             if(isL1){
-            flush_list.push_back(m_lines[i]->m_block_addr);
+            flush_list.push_back(std::make_pair(m_lines[i]->m_block_addr, m_lines[i]->is_buffered_update()));
             }
             for (unsigned j = 0; j < SECTOR_CHUNCK_SIZE; j++)
                 m_lines[i]->set_status(INVALID, mem_access_sector_mask_t().set(j));
@@ -1530,7 +1530,7 @@ data_cache::rd_hit_base( new_addr_type addr,
         assert(mf->get_access_type() == GLOBAL_ACC_R);
         cache_block_t* block = m_tag_array->get_block(cache_index);
         block->set_status(MODIFIED, mf->get_access_sector_mask()) ;  // mark line as dirty
-       // return status_temp;
+               // return status_temp;
     } 
     return HIT;
 }

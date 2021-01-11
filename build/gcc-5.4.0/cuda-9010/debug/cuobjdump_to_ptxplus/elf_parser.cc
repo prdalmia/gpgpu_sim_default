@@ -85,7 +85,7 @@ int cmemcount=1;
 int lmemcount=1;
 bool lastcmem = false;// false = constrant0, true = constant1
 
-#line 89 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:339  */
+#line 89 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -105,8 +105,8 @@ bool lastcmem = false;// false = constrant0, true = constant1
 
 /* In a future release of Bison, this section will be replaced
    by #include "elf_parser.hh".  */
-#ifndef YY_ELF_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUOBJDUMP_TO_PTXPLUS_ELF_PARSER_HH_INCLUDED
-# define YY_ELF_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUOBJDUMP_TO_PTXPLUS_ELF_PARSER_HH_INCLUDED
+#ifndef YY_ELF_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUOBJDUMP_TO_PTXPLUS_ELF_PARSER_HH_INCLUDED
+# define YY_ELF_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUOBJDUMP_TO_PTXPLUS_ELF_PARSER_HH_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
@@ -143,7 +143,7 @@ union YYSTYPE
 
 	char* string_value;
 
-#line 147 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:355  */
+#line 147 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -156,11 +156,11 @@ extern YYSTYPE elf_lval;
 
 int elf_parse (void);
 
-#endif /* !YY_ELF_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUOBJDUMP_TO_PTXPLUS_ELF_PARSER_HH_INCLUDED  */
+#endif /* !YY_ELF_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_DEBUG_CUOBJDUMP_TO_PTXPLUS_ELF_PARSER_HH_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 164 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:358  */
+#line 164 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1264,13 +1264,13 @@ yyreduce:
 					}
 				}
 			}
-#line 1268 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1268 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 72 "elf.y" /* yacc.c:1646  */
     {}
-#line 1274 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1274 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 11:
@@ -1278,7 +1278,7 @@ yyreduce:
     {
 				g_instList->setKernelCount(cmemcount-1);
 			}
-#line 1282 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1282 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 12:
@@ -1288,7 +1288,7 @@ yyreduce:
 						g_instList->setLocalMemoryMap((yyvsp[0].string_value), lmemcount);
 						lmemcount++;
 					}
-#line 1292 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1292 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 13:
@@ -1299,7 +1299,7 @@ yyreduce:
 					cmemcount++;
 					lastcmem = true;
 				}
-#line 1303 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1303 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 15:
@@ -1309,7 +1309,7 @@ yyreduce:
 					g_instList->setConstMemoryType(".u32");
 					lastcmem = false;
 				}
-#line 1313 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1313 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 17:
@@ -1320,7 +1320,7 @@ yyreduce:
 					else
 						g_instList->addConstMemoryValue((yyvsp[0].string_value));
 				}
-#line 1324 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1324 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
   case 23:
@@ -1328,11 +1328,11 @@ yyreduce:
     {
 				g_instList->updateGlobalMemoryID((yyvsp[-2].string_value), (yyvsp[-1].string_value));
 			}
-#line 1332 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1332 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
     break;
 
 
-#line 1336 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
+#line 1336 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/elf_parser.cc" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

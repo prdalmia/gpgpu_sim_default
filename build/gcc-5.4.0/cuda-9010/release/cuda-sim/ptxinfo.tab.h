@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_PTXINFO_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
-# define YY_PTXINFO_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
+#ifndef YY_PTXINFO_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
+# define YY_PTXINFO_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUDA_SIM_PTXINFO_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -85,7 +85,7 @@ union YYSTYPE
   int    int_value;
   char * string_value;
 
-#line 89 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuda-sim/ptxinfo.tab.h" /* yacc.c:1909  */
+#line 89 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuda-sim/ptxinfo.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -98,4 +98,4 @@ extern YYSTYPE ptxinfo_lval;
 
 int ptxinfo_parse (void);
 
-#endif /* !YY_PTXINFO_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUDA_SIM_PTXINFO_TAB_H_INCLUDED  */
+#endif /* !YY_PTXINFO_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUDA_SIM_PTXINFO_TAB_H_INCLUDED  */

@@ -1,6 +1,6 @@
-#line 2 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
+#line 2 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
 
-#line 4 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
+#line 4 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -608,7 +608,7 @@ char *header_text;
 void header_error(const char*);
 extern void output(const char * text);
 /*Regular expresions go here*/
-#line 612 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
+#line 612 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
 
 #define INITIAL 0
 
@@ -829,7 +829,7 @@ YY_DECL
 	/*Translation rules*/
 
 	/*Compiler directives*/
-#line 833 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
+#line 833 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -1028,7 +1028,7 @@ YY_RULE_SETUP
 #line 117 "header.l"
 ECHO;
 	YY_BREAK
-#line 1032 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
+#line 1032 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuobjdump_to_ptxplus/header_lexer.cc"
 
 	case YY_END_OF_BUFFER:
 		{

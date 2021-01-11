@@ -1,6 +1,6 @@
-#line 2 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
+#line 2 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
 
-#line 4 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
+#line 4 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -1504,7 +1504,7 @@ int ptx_error( const char *s );
 
 
 
-#line 1508 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
+#line 1508 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
 
 #define INITIAL 0
 #define IN_STRING 1
@@ -1727,7 +1727,7 @@ YY_DECL
 #line 55 "ptx.l"
 
 
-#line 1731 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
+#line 1731 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -3453,7 +3453,7 @@ YY_RULE_SETUP
 #line 448 "ptx.l"
 ECHO;
 	YY_BREAK
-#line 3457 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
+#line 3457 "/gpgpusim/build/gcc-5.4.0/cuda-9010/debug/cuda-sim/lex.ptx_.c"
 case YY_STATE_EOF(INITIAL):
 case YY_STATE_EOF(IN_STRING):
 case YY_STATE_EOF(IN_COMMENT):

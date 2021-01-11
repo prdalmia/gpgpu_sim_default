@@ -77,7 +77,7 @@ void config_assign_float( char const * field, double value );
 #endif
 
 
-#line 81 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:339  */
+#line 81 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -97,8 +97,8 @@ void config_assign_float( char const * field, double value );
 
 /* In a future release of Bison, this section will be replaced
    by #include "y.tab.h".  */
-#ifndef YY_YY_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_INTERSIM2_Y_TAB_H_INCLUDED
-# define YY_YY_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_INTERSIM2_Y_TAB_H_INCLUDED
+#ifndef YY_YY_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_INTERSIM2_Y_TAB_H_INCLUDED
+# define YY_YY_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_INTERSIM2_Y_TAB_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 0
@@ -133,7 +133,7 @@ union YYSTYPE
   int    num;
   double fnum;
 
-#line 137 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:355  */
+#line 137 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -146,11 +146,11 @@ extern YYSTYPE yylval;
 
 int yyparse (void);
 
-#endif /* !YY_YY_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_INTERSIM2_Y_TAB_H_INCLUDED  */
+#endif /* !YY_YY_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_INTERSIM2_Y_TAB_H_INCLUDED  */
 
 /* Copy the second part of user declarations.  */
 
-#line 154 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:358  */
+#line 154 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -1221,23 +1221,23 @@ yyreduce:
         case 4:
 #line 32 "config.y" /* yacc.c:1646  */
     { config_assign_string( (yyvsp[-3].name), (yyvsp[-1].name) ); free( (yyvsp[-3].name) ); free( (yyvsp[-1].name) ); }
-#line 1225 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
+#line 1225 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 33 "config.y" /* yacc.c:1646  */
     { config_assign_int( (yyvsp[-3].name), (yyvsp[-1].num) ); free( (yyvsp[-3].name) ); }
-#line 1231 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
+#line 1231 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 34 "config.y" /* yacc.c:1646  */
     { config_assign_float( (yyvsp[-3].name), (yyvsp[-1].fnum) ); free( (yyvsp[-3].name) ); }
-#line 1237 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
+#line 1237 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1241 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
+#line 1241 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/intersim2/y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

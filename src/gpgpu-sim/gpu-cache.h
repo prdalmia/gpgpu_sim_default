@@ -842,7 +842,7 @@ public:
 	void update_cache_parameters(cache_config &config);
 	void add_pending_line(mem_fetch *mf);
 	void remove_pending_line(mem_fetch *mf);
-    std::list<new_addr_type> flush_list;
+    std::list<std::pair<new_addr_type,bool>> flush_list;
 protected:
     // This constructor is intended for use only from derived classes that wish to
     // avoid unnecessary memory allocation that takes place in the
@@ -1165,7 +1165,7 @@ public:
     mem_fetch *next_access(){return m_mshrs.next_access();}
     // flash invalidate all entries in cache
     void flush(bool isL1 = false){m_tag_array->flush(isL1);}
-    void flush(std::list<new_addr_type>& flushl, bool isL1 = false ){m_tag_array->flush(isL1);
+    void flush(std::list<std::pair<new_addr_type,bool>>& flushl, bool isL1 = false ){m_tag_array->flush(isL1);
     flushl = m_tag_array->flush_list;
     m_tag_array->flush_list.clear();
     }
@@ -1559,13 +1559,18 @@ public:
 
     virtual ~l1_cache(){}
     
-    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events){
-        mem_fetch *wb = m_memfetch_creator->alloc(addr,
-                GLOBAL_ACC_R,m_config.get_atom_sz(),false);
-                wb->set_buffered_update();
-                send_write_request(wb, READ_REQUEST_SENT, time, events);
-        
-        
+    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update){
+                if(bf_update== true){
+                mem_fetch *mwb = m_memfetch_creator->alloc(addr,
+                GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                mwb->set_buffered_update();
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+           }
+         else{
+            mem_fetch *wb = m_memfetch_creator->alloc(addr,
+                m_wrbk_type,m_config.m_atom_sz,true);
+          send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+       }   
     }
     virtual enum cache_request_status
         access( new_addr_type addr,

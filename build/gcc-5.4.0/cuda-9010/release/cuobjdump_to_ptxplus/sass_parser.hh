@@ -30,8 +30,8 @@
    This special exception was added by the Free Software Foundation in
    version 2.2 of Bison.  */
 
-#ifndef YY_SASS_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUOBJDUMP_TO_PTXPLUS_SASS_PARSER_HH_INCLUDED
-# define YY_SASS_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUOBJDUMP_TO_PTXPLUS_SASS_PARSER_HH_INCLUDED
+#ifndef YY_SASS_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUOBJDUMP_TO_PTXPLUS_SASS_PARSER_HH_INCLUDED
+# define YY_SASS_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUOBJDUMP_TO_PTXPLUS_SASS_PARSER_HH_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
 # define YYDEBUG 1
@@ -258,7 +258,7 @@ union YYSTYPE
   char * string_value;
   void * ptr_value;
 
-#line 262 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_parser.hh" /* yacc.c:1909  */
+#line 262 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_parser.hh" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -271,4 +271,4 @@ extern YYSTYPE sass_lval;
 
 int sass_parse (void);
 
-#endif /* !YY_SASS_AFS_CS_WISC_EDU_U_P_R_PREYESH_PUBLIC_CS758_FINAL_PROJECT_DEFAULT_GPGPU_SIM_DISTRIBUTION_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUOBJDUMP_TO_PTXPLUS_SASS_PARSER_HH_INCLUDED  */
+#endif /* !YY_SASS_GPGPUSIM_BUILD_GCC_5_4_0_CUDA_9010_RELEASE_CUOBJDUMP_TO_PTXPLUS_SASS_PARSER_HH_INCLUDED  */

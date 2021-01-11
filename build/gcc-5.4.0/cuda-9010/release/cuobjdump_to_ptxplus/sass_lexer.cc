@@ -1,6 +1,6 @@
-#line 2 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
+#line 2 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
 
-#line 4 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
+#line 4 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -1215,7 +1215,7 @@ char *sass_text;
 
 void sass_error(const char*);
 /*Regular expresions go here*/
-#line 1219 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
+#line 1219 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
 
 #define INITIAL 0
 
@@ -1443,7 +1443,7 @@ YY_DECL
 
 	/*label*/
 
-#line 1447 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
+#line 1447 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -2658,7 +2658,7 @@ YY_RULE_SETUP
 #line 359 "sass.l"
 ECHO;
 	YY_BREAK
-#line 2662 "/afs/cs.wisc.edu/u/p/r/preyesh/public/CS758_final_project/default/gpgpu-sim_distribution/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
+#line 2662 "/gpgpusim/build/gcc-5.4.0/cuda-9010/release/cuobjdump_to_ptxplus/sass_lexer.cc"
 
 	case YY_END_OF_BUFFER:
 		{
