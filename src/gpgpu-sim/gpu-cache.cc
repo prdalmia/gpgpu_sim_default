@@ -492,7 +492,7 @@ void tag_array::print( FILE *stream, unsigned &total_access, unsigned &total_mis
 
 void tag_array::print_bf( FILE *stream, unsigned &total_access, unsigned &total_misses ) const
 {
-    fprintf( stream, "\t\tAccess = %d, Hit = %d, Miss = %d\n", m_buffered_update_hit+m_buffered_update_miss, m_buffered_update_hit, m_buffered_update_miss);
+    fprintf( stream, "\t L1D_cache_core_bf[%d]: Access = %d, Hit = %d, Miss = %d\n", m_core_id,  m_buffered_update_hit+m_buffered_update_miss, m_buffered_update_hit, m_buffered_update_miss);
     total_misses+=(m_buffered_update_miss);
     total_access+=m_buffered_update_hit+m_buffered_update_miss;
 
@@ -501,9 +501,9 @@ void tag_array::print_bf( FILE *stream, unsigned &total_access, unsigned &total_
 void tag_array::print_bf_stats( ) const
 {
     for( const std::pair<new_addr_type, std::deque<int>> p : bf_history_map){
-         printf("\t Reuse obtained is the following: for address %x:" , p.first);
+         printf("\t Reuse %x:" , p.first);
         for(const int& count: p.second){
-          printf("\t %d ", count);
+          printf(" %d ", count);
         }
         printf("\n");
     }
