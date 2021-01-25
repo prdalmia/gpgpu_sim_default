@@ -214,6 +214,8 @@ void tag_array::init( int core_id, int type_id )
     m_access = 0;
     m_miss = 0;
     m_pending_hit = 0;
+    m_buffered_update_hit = 0;
+    m_buffered_update_miss = 0;
     m_res_fail = 0;
     m_sector_miss = 0;
     // initialize snapshot counters for visualizer
@@ -353,14 +355,26 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
         m_pending_hit++;
     case HIT: 
         m_lines[idx]->set_last_access_time(time, mf->get_access_sector_mask());
+        if (m_lines[idx]->is_buffered_update()){
+            m_buffered_update_hit++;
+            bf_count_map[mf->get_addr() & ~(new_addr_type)(127)]++;
+        }
         break;
     case MISS:
         m_miss++;
+        if (mf->isatomicforL1()){
+            m_buffered_update_miss++;
+            bf_count_map[mf->get_addr() & ~(new_addr_type)(127)]++;
+        }
         shader_cache_access_log(m_core_id, m_type_id, 1); // log cache misses
         if ( m_config.m_alloc_policy == ON_MISS ) {
             if( m_lines[idx]->is_modified_line()) {
                 wb = true;
                 evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update());
+            if (m_lines[idx]->is_buffered_update()){
+            bf_history_map[mf->get_addr()].push_back(bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)]);
+            bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)] = 0 ;
+        }
             }
             m_lines[idx]->allocate( m_config.tag(addr), m_config.block_addr(addr), time, mf->get_access_sector_mask(), mf->isatomicforL1());
         }
@@ -474,6 +488,26 @@ void tag_array::print( FILE *stream, unsigned &total_access, unsigned &total_mis
              m_pending_hit, (float) m_pending_hit / m_access);
     total_misses+=(m_miss+m_sector_miss);
     total_access+=m_access;
+}
+
+void tag_array::print_bf( FILE *stream, unsigned &total_access, unsigned &total_misses ) const
+{
+    fprintf( stream, "\t\tAccess = %d, Hit = %d, Miss = %d\n", m_buffered_update_hit+m_buffered_update_miss, m_buffered_update_hit, m_buffered_update_miss);
+    total_misses+=(m_buffered_update_miss);
+    total_access+=m_buffered_update_hit+m_buffered_update_miss;
+
+}
+
+void tag_array::print_bf_stats( ) const
+{
+    for( const std::pair<new_addr_type, std::deque<int>> p : bf_history_map){
+         printf("\t Reuse obtained is the following: for address %x:" , p.first);
+        for(const int& count: p.second){
+          printf("\t %d ", count);
+        }
+        printf("\n");
+    }
+
 }
 
 void tag_array::get_stats(unsigned &total_access, unsigned &total_misses, unsigned &total_hit_res, unsigned &total_res_fail) const{

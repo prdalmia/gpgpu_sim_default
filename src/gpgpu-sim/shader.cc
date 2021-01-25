@@ -1463,9 +1463,14 @@ void shader_core_ctx::execute()
 }
 
 void ldst_unit::print_cache_stats( FILE *fp, unsigned& dl1_accesses, unsigned& dl1_misses ) {
+   
+    if(m_sid == 0){
+        m_L1D->print_bf_stats();
+    }
    if( m_L1D ) {
-       m_L1D->print( fp, dl1_accesses, dl1_misses );
+       m_L1D->print_bf( fp, dl1_accesses, dl1_misses );
    }
+  
 }
 
 void ldst_unit::get_cache_stats(cache_stats &cs) {
@@ -2598,6 +2603,18 @@ void gpgpu_sim::shader_print_cache_stats( FILE *fout ) const{
         fprintf(fout, "\tL1D_total_cache_reservation_fails = %llu\n", total_css.res_fails);
         total_css.print_port_stats(fout, "\tL1D_cache"); 
     }
+
+       fprintf(fout, "L1D_buffered_update:\n");
+    unsigned total_bf_misses = 0, total_bf_accesses = 0;
+    for ( unsigned i = 0; i < m_shader_config->n_simt_clusters; ++i ) {
+         unsigned cluster_bf_misses = 0, cluster_bf_accesses = 0;
+         m_cluster[ i ]->print_cache_stats( fout, cluster_bf_accesses, cluster_bf_misses );
+         total_bf_misses += cluster_bf_misses;
+         total_bf_accesses += cluster_bf_accesses;
+   }
+   fprintf( fout, "\tL1D_bf_total_cache_accesses = %llu\n", total_bf_accesses );
+   fprintf( fout, "\ttL1D_bf_total_cache_misses = %llu\n", total_bf_misses );
+   fprintf( fout, "\ttL1D_bf_total_cache_miss_rate = %.4lf\n", (float)total_bf_misses / (float)total_bf_accesses );
 
     // L1C
     if(!m_shader_config->m_L1C_config.disabled()){

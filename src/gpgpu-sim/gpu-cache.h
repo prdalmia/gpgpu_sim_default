@@ -836,6 +836,8 @@ public:
     void new_window();
 
     void print( FILE *stream, unsigned &total_access, unsigned &total_misses ) const;
+    void print_bf( FILE *stream, unsigned &total_access, unsigned &total_misses ) const;
+    void print_bf_stats() const;
     float windowed_miss_rate( ) const;
     void get_stats(unsigned &total_access, unsigned &total_misses, unsigned &total_hit_res, unsigned &total_res_fail) const;
 
@@ -862,6 +864,8 @@ protected:
     unsigned m_access;
     unsigned m_miss;
     unsigned m_pending_hit; // number of cache miss that hit a line that is allocated but not filled
+    unsigned m_buffered_update_hit;
+    unsigned m_buffered_update_miss;
     unsigned m_res_fail;
     unsigned m_sector_miss;
 
@@ -870,6 +874,9 @@ protected:
     unsigned m_prev_snapshot_access;
     unsigned m_prev_snapshot_miss;
     unsigned m_prev_snapshot_pending_hit;
+    std::map < new_addr_type , unsigned long> bf_count_map;
+    std::map < new_addr_type , std::deque<int>> bf_history_map;
+
 
     int m_core_id; // which shader core is using this
     int m_type_id; // what kind of cache is this (normal, texture, constant)
@@ -1571,6 +1578,12 @@ public:
                 m_wrbk_type,m_config.m_atom_sz,true);
           send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
        }   
+    }
+    virtual void print_bf(FILE *fp, unsigned &accesses, unsigned &misses){
+        m_tag_array->print_bf(fp,accesses,misses);
+    }
+    virtual void print_bf_stats(){
+        m_tag_array->print_bf_stats();
     }
     virtual enum cache_request_status
         access( new_addr_type addr,
