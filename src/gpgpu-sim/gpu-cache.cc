@@ -362,7 +362,7 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
         break;
     case MISS:
         m_miss++;
-        if (mf->isatomicforL1()){
+         if (mf->isatomicforL1()){
             m_buffered_update_miss++;
             bf_count_map[mf->get_addr() & ~(new_addr_type)(127)]++;
         }
@@ -376,6 +376,17 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
             bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)] = 0 ;
         }
             }
+            
+            if (m_lines[idx]->is_buffered_update()){
+              if( mf->isatomicforL1()){
+                 bf_eviction++;
+              }
+              else{
+                 non_bf_eviction++;
+              }
+
+            }
+
             m_lines[idx]->allocate( m_config.tag(addr), m_config.block_addr(addr), time, mf->get_access_sector_mask(), mf->isatomicforL1());
         }
         break;
@@ -507,6 +518,7 @@ void tag_array::print_bf_stats( ) const
         }
         printf("\n");
     }
+    printf("\t The evictions of atomics were as follows: Evictions by atomics = %d, Evictions by non atomics = %d\n", bf_eviction, non_bf_eviction);
 
 }
 
@@ -1535,6 +1547,12 @@ data_cache::rd_hit_base( new_addr_type addr,
     bool wb = false;
     evicted_block_info evicted;
     //m_tag_array->access(block_addr,time,cache_index,mf);
+       if(miss_queue_full(1) && mf->isatomicforL1()) {
+        // cannot handle request this cycle
+        // (might need to generate two requests)
+    	m_stats.inc_fail_stats(mf->get_access_type(), MISS_QUEUE_FULL);
+        return RESERVATION_FAIL; 
+    }
     enum cache_request_status status_temp = m_tag_array->access(block_addr,time,cache_index,wb,evicted,mf);
    
     if(evicted.m_block_addr != 0 && evicted.m_modified_size != 0){
@@ -1548,6 +1566,7 @@ data_cache::rd_hit_base( new_addr_type addr,
            if(evicted.buffered_update == true){ 
                 mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                 
                 mwb->set_buffered_update();
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }

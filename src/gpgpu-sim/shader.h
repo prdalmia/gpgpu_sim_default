@@ -1323,7 +1323,6 @@ protected:
    shader_core_stats *m_stats; 
     std::map < new_addr_type , unsigned long> bf_count_map;
     std::map < new_addr_type , std::deque<int>> bf_history_map;
-
    // for debugging
    unsigned long long m_last_inst_gpu_sim_cycle;
    unsigned long long m_last_inst_gpu_tot_sim_cycle;

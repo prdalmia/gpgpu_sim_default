@@ -876,6 +876,8 @@ protected:
     unsigned m_prev_snapshot_pending_hit;
     std::map < new_addr_type , unsigned long> bf_count_map;
     std::map < new_addr_type , std::deque<int>> bf_history_map;
+    unsigned long bf_eviction;
+    unsigned long non_bf_eviction;
 
 
     int m_core_id; // which shader core is using this
