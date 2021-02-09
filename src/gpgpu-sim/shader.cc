@@ -1699,7 +1699,7 @@ void ldst_unit::L1_latency_queue_cycle()
         
 		   bool write_sent = was_write_sent(events);
 		   bool read_sent = was_read_sent(events);
-
+/*
            if(status != RESERVATION_FAIL){
                if (mf_next->isatomic() && m_sid == 0){
                printf(" Access is atomic at address %x and time %llu\n", mf_next->get_addr(), gpu_sim_cycle+gpu_tot_sim_cycle);
@@ -1708,7 +1708,7 @@ void ldst_unit::L1_latency_queue_cycle()
                    printf(" Access is non atomic at address %x and time %llu\n", mf_next->get_addr(), gpu_sim_cycle+gpu_tot_sim_cycle);
                }
            }
-
+*/
 		   if ( status == HIT ) {
                       //assert( !read_sent );
 			   l1_latency_queue[0] = NULL;

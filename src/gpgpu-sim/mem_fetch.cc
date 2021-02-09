@@ -107,8 +107,12 @@ void mem_fetch::set_status( enum mem_fetch_status status, unsigned long long cyc
 
 bool mem_fetch::isatomic() const
 {
-   if( m_inst.empty() ) return false;
+   if( !m_inst.empty() ){
    return m_inst.isatomic();
+   }
+   else{
+       return buffered_update;
+   }
 }
 
 void mem_fetch::do_atomic()
