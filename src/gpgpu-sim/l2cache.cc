@@ -622,8 +622,8 @@ std::vector<mem_fetch*> memory_sub_partition::breakdown_request_to_sector_reques
 			}
 		} else
 			{
-			    printf("Invalid sector received, address = 0x%06x, sector mask = %s, data size = %d",
-			    		mf->get_addr(), mf->get_access_sector_mask(), mf->get_data_size());
+			    printf("Invalid sector received, address = 0x%06x, sector mask = %s, data size = %d, is_atomic = %d, is_write = %d",
+			    		mf->get_addr(), mf->get_access_sector_mask(), mf->get_data_size(), mf->isatomic(), mf->is_write());
 				assert(0 && "Undefined sector mask is received");
 			}
 
