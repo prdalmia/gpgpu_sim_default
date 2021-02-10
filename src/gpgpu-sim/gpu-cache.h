@@ -1587,6 +1587,7 @@ public:
          else{
             mem_fetch *wb = m_memfetch_creator->alloc(addr,
                 m_wrbk_type,m_config.m_atom_sz,true);
+               wb->set_access_sector_mask(mask); 
           send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
        }   
     }

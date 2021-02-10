@@ -1590,6 +1590,7 @@ data_cache::rd_hit_base( new_addr_type addr,
       else{
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,evicted.m_modified_size,true);
+                wb->set_access_sector_mask(evicted.sector_mask);
         send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
     }
     }
@@ -1648,6 +1649,7 @@ data_cache::rd_miss_base( new_addr_type addr,
       else{
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,evicted.m_modified_size,true);
+                wb->set_access_sector_mask(evicted.sector_mask);
         send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
     }
     }
