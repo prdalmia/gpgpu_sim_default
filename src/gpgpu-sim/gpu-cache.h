@@ -132,7 +132,7 @@ struct cache_block_t {
     virtual void set_m_readable(bool readable, mem_access_sector_mask_t sector_mask)=0;
     virtual bool is_readable(mem_access_sector_mask_t sector_mask)=0;
     virtual void print_status()=0;
-    virtual bool is_buffered_update()=0;
+    virtual bool is_buffered_update(mem_access_sector_mask_t sector_mask)=0;
     virtual ~cache_block_t() {}
 
 
@@ -234,7 +234,7 @@ struct line_cache_block: public cache_block_t  {
 			return m_readable;
 		}
 
-        virtual bool is_buffered_update() {
+        virtual bool is_buffered_update(mem_access_sector_mask_t sector_mask) {
 			return buffered_update_bit;
 		}
         
@@ -269,6 +269,7 @@ struct sector_cache_block : public cache_block_t {
 			m_ignore_on_fill_status[i] = false;
 			m_set_modified_on_fill[i] = false;
 			m_readable[i] = true;
+            buffered_update_bit[i] = false;
 			}
 			m_line_alloc_time=0;
 			m_line_last_access_time=0;
@@ -277,10 +278,10 @@ struct sector_cache_block : public cache_block_t {
 
 	virtual void allocate( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask, bool buffered_update = false )
     {
-    	allocate_line( tag,  block_addr,  time, sector_mask );
+    	allocate_line( tag,  block_addr,  time, sector_mask, buffered_update );
     }
 
-    void allocate_line( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask )
+    void allocate_line( new_addr_type tag, new_addr_type block_addr, unsigned time, mem_access_sector_mask_t sector_mask, bool buffered_update = false )
 	{
 		//allocate a new line
 		//assert(m_block_addr != 0 && m_block_addr != block_addr);
@@ -297,6 +298,8 @@ struct sector_cache_block : public cache_block_t {
 		m_status[sidx]=RESERVED;
 		m_ignore_on_fill_status[sidx] = false;
 		m_set_modified_on_fill[sidx] = false;
+        buffered_update_bit[sidx]=buffered_update;
+
 
 		//set line stats
 		m_line_alloc_time=time;   //only set this for the first allocated sector
@@ -304,7 +307,7 @@ struct sector_cache_block : public cache_block_t {
 		m_line_fill_time=0;
 	}
 
-    void allocate_sector(unsigned time, mem_access_sector_mask_t sector_mask )
+    void allocate_sector(unsigned time, mem_access_sector_mask_t sector_mask, bool buffered_update = false )
 	{
     	//allocate invalid sector of this allocated valid line
     	assert(is_valid_line());
@@ -320,6 +323,7 @@ struct sector_cache_block : public cache_block_t {
 			m_set_modified_on_fill[sidx] = false;
 
 		m_status[sidx]=RESERVED;
+        buffered_update_bit[sidx] = buffered_update;
 		m_ignore_on_fill_status[sidx] = false;
 		//m_set_modified_on_fill[sidx] = false;
 		m_readable[sidx] = true;
@@ -420,10 +424,10 @@ struct sector_cache_block : public cache_block_t {
     	unsigned sidx = get_sector_index(sector_mask);
     	return m_readable[sidx];
 	}
-    virtual bool is_buffered_update() {
-			return false;
-		}
-
+    virtual bool is_buffered_update(mem_access_sector_mask_t sector_mask) {
+			unsigned sidx = get_sector_index(sector_mask);
+    	      return buffered_update_bit[sidx];
+	}
     virtual unsigned  get_modified_size()
 	{
 		unsigned modified=0;
@@ -450,6 +454,7 @@ private:
     bool m_ignore_on_fill_status[SECTOR_CHUNCK_SIZE];
     bool m_set_modified_on_fill[SECTOR_CHUNCK_SIZE];
     bool m_readable[SECTOR_CHUNCK_SIZE];
+    bool buffered_update_bit[SECTOR_CHUNCK_SIZE];
 
     unsigned get_sector_index(mem_access_sector_mask_t sector_mask)
     {
@@ -844,7 +849,7 @@ public:
 	void update_cache_parameters(cache_config &config);
 	void add_pending_line(mem_fetch *mf);
 	void remove_pending_line(mem_fetch *mf);
-    std::list<std::pair<new_addr_type,bool>> flush_list;
+    std::list<std::pair<new_addr_type, std::pair<unsigned int,bool>>> flush_list;
 protected:
     // This constructor is intended for use only from derived classes that wish to
     // avoid unnecessary memory allocation that takes place in the
@@ -1174,7 +1179,7 @@ public:
     mem_fetch *next_access(){return m_mshrs.next_access();}
     // flash invalidate all entries in cache
     void flush(bool isL1 = false){m_tag_array->flush(isL1);}
-    void flush(std::list<std::pair<new_addr_type,bool>>& flushl, bool isL1 = false ){m_tag_array->flush(isL1);
+    void flush(std::list<std::pair<new_addr_type, std::pair<unsigned int,bool>>> & flushl, bool isL1 = false ){m_tag_array->flush(isL1);
     flushl = m_tag_array->flush_list;
     m_tag_array->flush_list.clear();
     }
@@ -1568,10 +1573,11 @@ public:
 
     virtual ~l1_cache(){}
     
-    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update){
+    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update, unsigned int modified_size){
                 if(bf_update== true){
                 mem_fetch *mwb = m_memfetch_creator->alloc(addr,
-                GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                GLOBAL_ACC_R, modified_size,false);
+                printf("Flush: Sending eviction request for addr %x with size %d\n",addr, modified_size) ;       
                 mwb->set_buffered_update();
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }

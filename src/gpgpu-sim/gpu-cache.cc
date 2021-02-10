@@ -355,7 +355,7 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
         m_pending_hit++;
     case HIT: 
         m_lines[idx]->set_last_access_time(time, mf->get_access_sector_mask());
-        if (m_lines[idx]->is_buffered_update()){
+        if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
             m_buffered_update_hit++;
             bf_count_map[mf->get_addr() & ~(new_addr_type)(127)]++;
         }
@@ -370,14 +370,14 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
         if ( m_config.m_alloc_policy == ON_MISS ) {
             if( m_lines[idx]->is_modified_line()) {
                 wb = true;
-                evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update());
-            if (m_lines[idx]->is_buffered_update()){
+                evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update(mf->get_access_sector_mask()));
+            if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
             bf_history_map[mf->get_addr()].push_back(bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)]);
             bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)] = 0 ;
         }
             }
             
-            if (m_lines[idx]->is_buffered_update()){
+            if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
               if( mf->isatomicforL1()){
                  bf_eviction++;
               }
@@ -395,7 +395,7 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
     	m_sector_miss++;
 		shader_cache_access_log(m_core_id, m_type_id, 1); // log cache misses
 		if ( m_config.m_alloc_policy == ON_MISS ) {
-			((sector_cache_block*)m_lines[idx])->allocate_sector( time, mf->get_access_sector_mask() );
+			((sector_cache_block*)m_lines[idx])->allocate_sector( time, mf->get_access_sector_mask(), mf->isatomicforL1() );
 		}
 		break;
     case RESERVATION_FAIL:
@@ -448,7 +448,7 @@ void tag_array::flush(bool isL1)
         if (m_lines[i]->is_modified_line())
         {
             if(isL1){
-            flush_list.push_back(std::make_pair(m_lines[i]->m_block_addr, m_lines[i]->is_buffered_update()));
+            flush_list.push_back(std::make_pair(m_lines[i]->m_block_addr, std::make_pair(m_lines[i]->get_modified_size(), m_lines[i]->is_buffered_update(mem_access_sector_mask_t().set(0xFFFFFFF)))));
             }
             for (unsigned j = 0; j < SECTOR_CHUNCK_SIZE; j++)
                 m_lines[i]->set_status(INVALID, mem_access_sector_mask_t().set(j));
@@ -1565,7 +1565,7 @@ data_cache::rd_hit_base( new_addr_type addr,
         if(wb){ 
            if(evicted.buffered_update == true){ 
                 mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
-                GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                GLOBAL_ACC_R,evicted.m_modified_size,false);
                  
                 mwb->set_buffered_update();
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
@@ -1622,7 +1622,7 @@ data_cache::rd_miss_base( new_addr_type addr,
         if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){ 
             if(evicted.buffered_update == true){ 
                 mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
-                GLOBAL_ACC_R,m_config.m_atom_sz,false);
+                GLOBAL_ACC_R,evicted.m_modified_size,false);
                 mwb->set_buffered_update();
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }
