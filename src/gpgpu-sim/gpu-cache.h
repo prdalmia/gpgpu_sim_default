@@ -76,16 +76,18 @@ struct evicted_block_info {
 	new_addr_type m_block_addr;
 	unsigned m_modified_size;
     bool buffered_update;
+    mem_access_sector_mask_t sector_mask;
 	evicted_block_info() {
 		m_block_addr = 0;
 		m_modified_size = 0;
         buffered_update = false;
+        sector_mask = 0;
 	}
-	void set_info(new_addr_type block_addr, unsigned modified_size, bool bf_update=false){
+	void set_info(new_addr_type block_addr, unsigned modified_size, bool bf_update=false, mem_access_sector_mask_t mask = 0 ){
 		m_block_addr = block_addr;
 		m_modified_size = modified_size;
         buffered_update = bf_update;
-
+        sector_mask = mask;
 	}
 };
 
@@ -849,7 +851,7 @@ public:
 	void update_cache_parameters(cache_config &config);
 	void add_pending_line(mem_fetch *mf);
 	void remove_pending_line(mem_fetch *mf);
-    std::list<std::pair<new_addr_type, std::pair<unsigned int,bool>>> flush_list;
+    std::list<std::pair<std::pair<new_addr_type, mem_access_sector_mask_t>, std::pair<unsigned int,bool>>> flush_list;
 protected:
     // This constructor is intended for use only from derived classes that wish to
     // avoid unnecessary memory allocation that takes place in the
@@ -1179,7 +1181,7 @@ public:
     mem_fetch *next_access(){return m_mshrs.next_access();}
     // flash invalidate all entries in cache
     void flush(bool isL1 = false){m_tag_array->flush(isL1);}
-    void flush(std::list<std::pair<new_addr_type, std::pair<unsigned int,bool>>> & flushl, bool isL1 = false ){m_tag_array->flush(isL1);
+    void flush(std::list<std::pair<std::pair<new_addr_type, mem_access_sector_mask_t>, std::pair<unsigned int,bool>>> & flushl, bool isL1 = false ){m_tag_array->flush(isL1);
     flushl = m_tag_array->flush_list;
     m_tag_array->flush_list.clear();
     }
@@ -1573,12 +1575,13 @@ public:
 
     virtual ~l1_cache(){}
     
-    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update, unsigned int modified_size){
+    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update, unsigned int modified_size, mem_access_sector_mask_t mask){
                 if(bf_update== true){
                 mem_fetch *mwb = m_memfetch_creator->alloc(addr,
                 GLOBAL_ACC_R, modified_size,false);
                 printf("Flush: Sending eviction request for addr %x with size %d\n",addr, modified_size) ;       
                 mwb->set_buffered_update();
+                mwb->set_access_sector_mask(mask);
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }
          else{

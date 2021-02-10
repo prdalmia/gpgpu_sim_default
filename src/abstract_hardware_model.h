@@ -781,6 +781,7 @@ public:
 
    new_addr_type get_addr() const { return m_addr; }
    void set_addr(new_addr_type addr) {m_addr=addr;}
+   void set_sector_mask(mem_access_sector_mask_t sector_mask) {m_sector_mask = sector_mask;}
    unsigned get_size() const { return m_req_size; }
    const active_mask_t &get_warp_mask() const { return m_warp_mask; }
    bool is_write() const { return m_write; }
