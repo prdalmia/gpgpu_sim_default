@@ -377,15 +377,20 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
             } 
             if(sector_mask.count() == 3){
                 sector_mask.set();
+
             }
                 if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
             bf_history_map[mf->get_addr()].push_back(bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)]);
             bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)] = 0 ;
                 }
             
-        }
+            }
+            if(m_lines[idx]->get_modified_size() == 96){
+               evicted.set_info(m_lines[idx]->m_block_addr, 128, m_lines[idx]->is_buffered_update(mf->get_access_sector_mask()), sector_mask);
+            }
+            else{
                 evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update(mf->get_access_sector_mask()), sector_mask);
-            
+            }
             }
             
             if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
