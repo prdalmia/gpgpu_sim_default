@@ -614,6 +614,10 @@ std::vector<mem_fetch*> memory_sub_partition::breakdown_request_to_sector_reques
 			start=2; end=3;
 		} else if (mf->get_data_size() == 64 && mf->get_access_sector_mask().to_string() == "0011") {
 			start=0; end=1;
+        }else if (mf->get_data_size() == 64 && (mf->get_access_sector_mask().to_string() == "1010"  || mf->get_access_sector_mask().to_string() == "1001")) {
+			start=2; end=3;
+        }else if (mf->get_data_size() == 64 && ( mf->get_access_sector_mask().to_string() == "0110" || mf->get_access_sector_mask().to_string() == "0101")) {
+			start=0; end=1;    
 		} else if (mf->get_data_size() == 64 && (mf->get_access_sector_mask().to_string() == "1111" || mf->get_access_sector_mask().to_string() == "0000")) {
 			if(mf->get_addr() % 128 == 0) {
 				start=0; end=1;
