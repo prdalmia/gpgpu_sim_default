@@ -1581,9 +1581,10 @@ data_cache::rd_hit_base( new_addr_type addr,
            if(evicted.buffered_update == true){ 
                 mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 GLOBAL_ACC_R,evicted.m_modified_size,false);
-                 printf("RD_hit_base: Sending eviction request for addr %x with size %d from core %d\n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid());          
+               
                 mwb->set_buffered_update();
                 mwb->set_access_sector_mask(evicted.sector_mask);
+                printf("RD_hit_base: Sending eviction request for addr %x with size %d from core %d and sector mask is %s derived from %s and incoming mask is %s \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), mwb->get_access_sector_mask().to_string(), evicted.sector_mask.to_string(), mf->get_access_sector_mask().to_string());
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }
       else{
