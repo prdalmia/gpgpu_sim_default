@@ -371,15 +371,14 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
             mem_access_sector_mask_t sector_mask = 0;
             if( m_lines[idx]->is_modified_line()) {
                 wb = true;
-                if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
-                    
-                    for(unsigned j=0; j < SECTOR_CHUNCK_SIZE; j++){
+                      for(unsigned j=0; j < SECTOR_CHUNCK_SIZE; j++){
     		if(m_lines[idx]->get_status(mem_access_sector_mask_t().set(j)) == MODIFIED){
                 sector_mask.set(j);
             } 
-        }
+                if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
             bf_history_map[mf->get_addr()].push_back(bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)]);
             bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)] = 0 ;
+                }
             
         }
                 evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update(mf->get_access_sector_mask()), sector_mask);
@@ -1345,6 +1344,7 @@ data_cache::wr_miss_wa_naive( new_addr_type addr,
         	assert(status == MISS);   //SECTOR_MISS and HIT_RESERVED should not send write back
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,evicted.m_modified_size,true);
+                wb->set_access_sector_mask(evicted.sector_mask);
             send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
         }
         return MISS;
@@ -1389,6 +1389,7 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 			   if( wb && (m_config.m_write_policy != WRITE_THROUGH) ) {
 				   mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
 					   m_wrbk_type,evicted.m_modified_size,true);
+                       wb->set_access_sector_mask(evicted.sector_mask);
 				   send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
 			   }
 			   return MISS;
@@ -1464,6 +1465,7 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 				if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){
 					mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
 						m_wrbk_type,evicted.m_modified_size,true);
+                        wb->set_access_sector_mask(evicted.sector_mask);
 					send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
 			}
 				return MISS;
@@ -1517,6 +1519,7 @@ data_cache::wr_miss_wa_lazy_fetch_on_read( new_addr_type addr,
 			   if( wb && (m_config.m_write_policy != WRITE_THROUGH) ) {
 				   mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
 					   m_wrbk_type,evicted.m_modified_size,true);
+                       wb->set_access_sector_mask(evicted.sector_mask);
 				   send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
 			   }
 			   return MISS;
