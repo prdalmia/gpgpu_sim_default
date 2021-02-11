@@ -661,7 +661,9 @@ std::vector<mem_fetch*> memory_sub_partition::breakdown_request_to_sector_reques
 								mf->get_tpc(),
 								mf->get_mem_config(),
 								mf);
-
+        if(mf->isbufferedupdate()){
+            n_mf->set_buffered_update();
+        }
 			 result.push_back(n_mf);
 			 byte_sector_mask <<= SECTOR_SIZE;
 		}
