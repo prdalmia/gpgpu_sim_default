@@ -1107,9 +1107,7 @@ void baseline_cache::fill(mem_fetch *mf, unsigned time){
 	if(m_config.m_mshr_type == SECTOR_ASSOC) {
 	assert(mf->get_original_mf());
 	extra_mf_fields_lookup::iterator e = m_extra_mf_fields.find(mf->get_original_mf());
-    if(e == m_extra_mf_fields.end()){
-        printf("This is happening for address %x, from core %d, is atomic %d, is write %d\n", mf->get_addr(), mf->get_sid(), mf->isatomic(), mf->is_write());
-    }
+    
     assert( e != m_extra_mf_fields.end() );
     e->second.pending_read--;
 
@@ -1125,6 +1123,9 @@ void baseline_cache::fill(mem_fetch *mf, unsigned time){
 	}
 
     extra_mf_fields_lookup::iterator e = m_extra_mf_fields.find(mf);
+    if(e == m_extra_mf_fields.end()){
+        printf("This is happening for address %x, from core %d, is atomic %d, is write %d\n", mf->get_addr(), mf->get_sid(), mf->isatomic(), mf->is_write());
+    }
     assert( e != m_extra_mf_fields.end() );
     assert( e->second.m_valid );
     mf->set_data_size( e->second.m_data_size );
