@@ -680,7 +680,9 @@ void memory_sub_partition::push( mem_fetch* m_req, unsigned long long cycle )
     		reqs = breakdown_request_to_sector_requests(m_req);
     	else
     		reqs.push_back(m_req);
-
+     if( m_req->get_addr() == 0xc0892780){
+            printf("2 This request type is %d and is buffered update is set to %d\n", m_req->get_type(), m_req->isbufferedupdate());
+            }
     	for(unsigned i=0; i<reqs.size(); ++i) {
     		mem_fetch* req = reqs[i];
 			m_request_tracker.insert(req);
