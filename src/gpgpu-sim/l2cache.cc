@@ -407,7 +407,11 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
             if ( !output_full && port_free ) {
                 std::list<cache_event> events;
                 enum cache_request_status status = m_L2cache->access(mf->get_addr(),mf,gpu_sim_cycle+gpu_tot_sim_cycle+m_memcpy_cycle_offset,events);
-                bool write_sent = was_write_sent(events);
+                
+                if( mf->get_addr() == 0xc0892780){
+            printf("This request type is %d and is buffered update is set to %d\n", mf->get_type(), mf->isbufferedupdate());
+            }
+       bool write_sent = was_write_sent(events);
                 bool read_sent = was_read_sent(events);
                 MEM_SUBPART_DPRINTF("Probing L2 cache Address=%llx, status=%u\n", mf->get_addr(), status); 
 
