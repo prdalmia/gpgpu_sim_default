@@ -2343,6 +2343,9 @@ void ldst_unit::cycle()
 
    if( !m_response_fifo.empty() ) {
        mem_fetch *mf = m_response_fifo.front();
+       if( mf->get_addr() == 0xc0892780){
+           printf("This request type is %d and is buffered update is set to %d\n", mf->get_type(), mf->isbufferedupdate());
+       }
        if (mf->get_access_type() == TEXTURE_ACC_R) {
            if (m_L1T->fill_port_free()) {
                m_L1T->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
