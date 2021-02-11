@@ -463,6 +463,9 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
     if( !m_rop.empty() && (cycle >= m_rop.front().ready_cycle) && !m_icnt_L2_queue->full() ) {
         mem_fetch* mf = m_rop.front().req;
         m_rop.pop();
+             if( mf->get_addr() == 0xc0892780){
+            printf("3 This request type is %d and is buffered update is set to %d\n", mf->get_type(), mf->isbufferedupdate());
+            }
         m_icnt_L2_queue->push(mf);
         mf->set_status(IN_PARTITION_ICNT_TO_L2_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
     }
