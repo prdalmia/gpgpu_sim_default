@@ -355,7 +355,7 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
         m_pending_hit++;
     case HIT: 
         m_lines[idx]->set_last_access_time(time, mf->get_access_sector_mask());
-        if (m_lines[idx]->is_buffered_update(mf->get_access_sector_mask())){
+        if (m_lines[idx]->is_buffered_update()){
             m_buffered_update_hit++;
             bf_count_map[mf->get_addr() & ~(new_addr_type)(127)]++;
         }
@@ -379,21 +379,21 @@ enum cache_request_status tag_array::access( new_addr_type addr, unsigned time, 
                 sector_mask.set();
 
             }
-                if (m_lines[idx]->is_buffered_update(sector_mask)){
+                if (m_lines[idx]->is_buffered_update()){
             bf_history_map[mf->get_addr()].push_back(bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)]);
             bf_count_map[m_lines[idx]->m_block_addr & ~(new_addr_type)(127)] = 0 ;
                 }
             
             }
             if(m_lines[idx]->get_modified_size() == 96){
-               evicted.set_info(m_lines[idx]->m_block_addr, 128, m_lines[idx]->is_buffered_update(sector_mask), sector_mask);
+               evicted.set_info(m_lines[idx]->m_block_addr, 128, m_lines[idx]->is_buffered_update(), sector_mask);
             }
             else{
-                evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update(sector_mask), sector_mask);
+                evicted.set_info(m_lines[idx]->m_block_addr, m_lines[idx]->get_modified_size(), m_lines[idx]->is_buffered_update(), sector_mask);
             }
             }
             
-            if (m_lines[idx]->is_buffered_update(sector_mask)){
+            if (m_lines[idx]->is_buffered_update()){
               if( mf->isatomicforL1()){
                  bf_eviction++;
               }
@@ -470,7 +470,7 @@ void tag_array::flush(bool isL1)
             } 
                 }
             if(isL1){
-            flush_list.push_back(std::make_pair(std::make_pair(m_lines[i]->m_block_addr,mask), std::make_pair(m_lines[i]->get_modified_size(), m_lines[i]->is_buffered_update(mask))));
+            flush_list.push_back(std::make_pair(std::make_pair(m_lines[i]->m_block_addr,mask), std::make_pair(m_lines[i]->get_modified_size(), m_lines[i]->is_buffered_update())));
             }
             for (unsigned j = 0; j < SECTOR_CHUNCK_SIZE; j++)
                 m_lines[i]->set_status(INVALID, mem_access_sector_mask_t().set(j));

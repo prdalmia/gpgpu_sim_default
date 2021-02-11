@@ -134,7 +134,7 @@ struct cache_block_t {
     virtual void set_m_readable(bool readable, mem_access_sector_mask_t sector_mask)=0;
     virtual bool is_readable(mem_access_sector_mask_t sector_mask)=0;
     virtual void print_status()=0;
-    virtual bool is_buffered_update(mem_access_sector_mask_t sector_mask)=0;
+    virtual bool is_buffered_update()=0;
     virtual ~cache_block_t() {}
 
 
@@ -236,7 +236,7 @@ struct line_cache_block: public cache_block_t  {
 			return m_readable;
 		}
 
-        virtual bool is_buffered_update(mem_access_sector_mask_t sector_mask) {
+        virtual bool is_buffered_update() {
 			return buffered_update_bit;
 		}
         
@@ -426,9 +426,13 @@ struct sector_cache_block : public cache_block_t {
     	unsigned sidx = get_sector_index(sector_mask);
     	return m_readable[sidx];
 	}
-    virtual bool is_buffered_update(mem_access_sector_mask_t sector_mask) {
-			unsigned sidx = get_sector_index(sector_mask);
-    	      return buffered_update_bit[sidx];
+    virtual bool is_buffered_update() {
+			for(unsigned i =0; i< SECTOR_CHUNCK_SIZE; ++i) {
+			if (buffered_update_bit[i])
+				{
+                    return true;
+                }
+            }
 	}
     virtual unsigned  get_modified_size()
 	{
