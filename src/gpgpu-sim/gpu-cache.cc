@@ -1599,7 +1599,7 @@ data_cache::rd_hit_base( new_addr_type addr,
                
                 mwb->set_buffered_update();
                 mwb->set_access_sector_mask(evicted.sector_mask);
-                printf("RD_hit_base: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), mwb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
+               // printf("RD_hit_base: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), mwb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }
       else{
@@ -1659,7 +1659,7 @@ data_cache::rd_miss_base( new_addr_type addr,
                 mwb->set_access_sector_mask(evicted.sector_mask);
                 mwb->set_buffered_update();
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
-               printf("RD_miss_base: Sending eviction request for addr %x with size %d from core %d\n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid());
+           //    printf("RD_miss_base: Sending eviction request for addr %x with size %d from core %d\n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid());
            }
       else{
             mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
