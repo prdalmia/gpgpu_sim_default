@@ -1617,9 +1617,6 @@ void gpgpu_sim::cycle()
              gpu_stall_dramfull++;
           } else {
               mem_fetch* mf = (mem_fetch*) icnt_pop( m_shader_config->mem2device(i) );
-                   if( mf && mf->get_addr() == 0xc0892780){
-            printf("1 This request type is %d and is buffered update is set to %d\n", mf->get_type(), mf->isbufferedupdate());
-            }
               m_memory_sub_partition[i]->push( mf, gpu_sim_cycle + gpu_tot_sim_cycle );
               if(mf)
             	  partiton_reqs_in_parallel_per_cycle++;

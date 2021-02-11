@@ -408,9 +408,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
                 std::list<cache_event> events;
                 enum cache_request_status status = m_L2cache->access(mf->get_addr(),mf,gpu_sim_cycle+gpu_tot_sim_cycle+m_memcpy_cycle_offset,events);
                 
-                if( mf->get_addr() == 0xc0892780){
-            printf("This request type is %d and is buffered update is set to %d\n", mf->get_type(), mf->isbufferedupdate());
-            }
        bool write_sent = was_write_sent(events);
                 bool read_sent = was_read_sent(events);
                 MEM_SUBPART_DPRINTF("Probing L2 cache Address=%llx, status=%u\n", mf->get_addr(), status); 
@@ -463,9 +460,6 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
     if( !m_rop.empty() && (cycle >= m_rop.front().ready_cycle) && !m_icnt_L2_queue->full() ) {
         mem_fetch* mf = m_rop.front().req;
         m_rop.pop();
-             if( mf->get_addr() == 0xc0892780){
-            printf("3 This request type is %d and is buffered update is set to %d\n", mf->get_type(), mf->isbufferedupdate());
-            }
         m_icnt_L2_queue->push(mf);
         mf->set_status(IN_PARTITION_ICNT_TO_L2_QUEUE,gpu_sim_cycle+gpu_tot_sim_cycle);
     }
@@ -687,9 +681,7 @@ void memory_sub_partition::push( mem_fetch* m_req, unsigned long long cycle )
     		reqs.push_back(m_req);
     	for(unsigned i=0; i<reqs.size(); ++i) {
     		mem_fetch* req = reqs[i];
-            if( req->get_addr() == 0xc0892780){
-            printf("2 This request type is %d and is buffered update is set to %d\n", req->get_type(), req->isbufferedupdate());
-            }
+           
 			m_request_tracker.insert(req);
 			if( req->istexture() ) {
 				m_icnt_L2_queue->push(req);
