@@ -1592,8 +1592,7 @@ public:
                 
                 if(bf_update== true){
                 mem_fetch *mwb = m_memfetch_creator->alloc(addr,
-                GLOBAL_ACC_R, mod_size,false);
-                printf("Flush: Sending eviction request for addr %x with size %d\n",addr, modified_size) ;       
+                GLOBAL_ACC_R, mod_size,false);     
                 mwb->set_buffered_update();
                 mwb->set_access_sector_mask(mask);
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
