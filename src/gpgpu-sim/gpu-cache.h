@@ -433,7 +433,9 @@ struct sector_cache_block : public cache_block_t {
                     return true;
                 }
             }
-	}
+        return false;
+        }    
+        
     virtual unsigned  get_modified_size()
 	{
 		unsigned modified=0;
