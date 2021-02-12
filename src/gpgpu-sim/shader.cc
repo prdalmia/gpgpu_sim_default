@@ -2374,7 +2374,7 @@ void ldst_unit::cycle()
                        mf->set_status(IN_SHADER_FETCHED,gpu_sim_cycle+gpu_tot_sim_cycle);
                        m_response_fifo.pop_front();
                        if(mf->isbufferedupdate()){
-                      printf("Buffered update response recieved for addr %d by core %d\n", mf->get_addr(), mf->get_sid()); 
+                   //   printf("Buffered update response recieved for addr %d by core %d\n", mf->get_addr(), mf->get_sid()); 
 
                        delete mf;
                        }

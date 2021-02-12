@@ -85,7 +85,7 @@ public:
    bool is_write() {return m_access.is_write();}
    void set_addr(new_addr_type addr) { m_access.set_addr(addr); }
    void set_buffered_update() { buffered_update = true;
-   printf("Buffered update sent for addr %d by core %d\n", get_addr(), get_sid()); 
+  // printf("Buffered update sent for addr %d by core %d\n", get_addr(), get_sid()); 
    }
    new_addr_type get_addr() const { return m_access.get_addr(); }
    unsigned get_access_size() const { return m_access.get_size(); }
