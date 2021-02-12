@@ -1581,25 +1581,17 @@ public:
 
     virtual ~l1_cache(){}
     
-    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update, unsigned int modified_size, mem_access_sector_mask_t mask){
-            unsigned int mod_size;
-                if(modified_size == 96){
-                    mod_size = 128;
-                }
-                else{
-                    mod_size = modified_size;
-                }
-                
+    virtual void wb_request(new_addr_type addr, unsigned int time, std::list<cache_event> events, bool bf_update, unsigned int modified_size, mem_access_sector_mask_t mask){    
                 if(bf_update== true){
                 mem_fetch *mwb = m_memfetch_creator->alloc(addr,
-                GLOBAL_ACC_R, mod_size,false);     
+                GLOBAL_ACC_R, modified_size,false);     
                 mwb->set_buffered_update();
                 mwb->set_access_sector_mask(mask);
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
            }
          else{
             mem_fetch *wb = m_memfetch_creator->alloc(addr,
-                m_wrbk_type,mod_size,true);
+                m_wrbk_type,modified_size,true);
                wb->set_access_sector_mask(mask); 
           send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
        }   

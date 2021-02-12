@@ -606,10 +606,10 @@ std::vector<mem_fetch*> memory_sub_partition::breakdown_request_to_sector_reques
 
 	if(mf->get_data_size() == SECTOR_SIZE && mf->get_access_sector_mask().count() == 1) {
 		result.push_back(mf);
-	} else if (mf->get_data_size() == 128 || mf->get_data_size() == 64) {
+	} else if (mf->get_data_size() == 128 || mf->get_data_size() == 64 || mf->get_data_size() == 96) {
         //We only accept 32, 64 and 128 bytes reqs
 		unsigned start=0, end=0;
-		if(mf->get_data_size() == 128) {
+		if(mf->get_data_size() == 128 || mf->get_data_size() == 96 ) {
 			start=0; end=3;
 		} else if (mf->get_data_size() == 64 && mf->get_access_sector_mask().to_string() == "1100") {
 			start=2; end=3;
