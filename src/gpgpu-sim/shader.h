@@ -2078,7 +2078,7 @@ public:
     unsigned issue_block2core();
     void cache_flush();
     void cache_invalidate();
-    bool icnt_injection_buffer_full(unsigned size, bool write);
+    bool icnt_injection_buffer_full(unsigned size, bool write, bool is_atomic = false);
     void icnt_inject_request_packet(class mem_fetch *mf);
 
 
@@ -2126,9 +2126,9 @@ private:
 class shader_memory_interface : public mem_fetch_interface {
 public:
     shader_memory_interface( shader_core_ctx *core, simt_core_cluster *cluster ) { m_core=core; m_cluster=cluster; }
-    virtual bool full( unsigned size, bool write ) const 
+    virtual bool full( unsigned size, bool write, bool isatomic = false ) const 
     {
-        return m_cluster->icnt_injection_buffer_full(size,write);
+        return m_cluster->icnt_injection_buffer_full(size,write, isatomic);
     }
     virtual void push(mem_fetch *mf) 
     {
@@ -2143,7 +2143,7 @@ private:
 class perfect_memory_interface : public mem_fetch_interface {
 public:
     perfect_memory_interface( shader_core_ctx *core, simt_core_cluster *cluster ) { m_core=core; m_cluster=cluster; }
-    virtual bool full( unsigned size, bool write) const
+    virtual bool full( unsigned size, bool write, bool isatomic) const
     {
         return m_cluster->response_queue_full();
     }

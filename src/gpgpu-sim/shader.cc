@@ -3985,10 +3985,10 @@ void simt_core_cluster::cache_invalidate()
         m_core[i]->cache_invalidate();
 }
 
-bool simt_core_cluster::icnt_injection_buffer_full(unsigned size, bool write)
+bool simt_core_cluster::icnt_injection_buffer_full(unsigned size, bool write, bool is_atomic)
 {
     unsigned request_size = size;
-    if (!write) 
+    if (!write && !is_atomic) 
         request_size = READ_PACKET_SIZE;
     return ! ::icnt_has_buffer(m_cluster_id, request_size);
 }
@@ -4018,13 +4018,13 @@ void simt_core_cluster::icnt_inject_request_packet(class mem_fetch *mf)
    // - For write request and atomic request, the packet contains the data 
    // - For read request (i.e. not write nor atomic), the packet only has control metadata
    unsigned int packet_size = mf->size(); 
-   if (!mf->get_is_write()) {
+   if (!mf->get_is_write() && !mf->isatomic()) {
       packet_size = mf->get_ctrl_size(); 
    }
    m_stats->m_outgoing_traffic_stats->record_traffic(mf, packet_size); 
    unsigned destination = mf->get_sub_partition_id();
    mf->set_status(IN_ICNT_TO_MEM,gpu_sim_cycle+gpu_tot_sim_cycle);
-   if (!mf->get_is_write())
+   if (!mf->get_is_write() && !mf->isatomic())
       ::icnt_push(m_cluster_id, m_config->mem2device(destination), (void*)mf, mf->get_ctrl_size() );
    else 
       ::icnt_push(m_cluster_id, m_config->mem2device(destination), (void*)mf, mf->size());
