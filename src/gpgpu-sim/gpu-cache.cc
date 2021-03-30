@@ -1341,11 +1341,21 @@ data_cache::wr_miss_wa_naive( new_addr_type addr,
         // If evicted block is modified and not a write-through
         // (already modified lower level)
         if( wb && (m_config.m_write_policy != WRITE_THROUGH) ) { 
-        	assert(status == MISS);   //SECTOR_MISS and HIT_RESERVED should not send write back
-            mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
+              if(evicted.buffered_update == true){ 
+                mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                GLOBAL_ACC_R,evicted.m_modified_size,false);
+               
+                mwb->set_buffered_update();
+                mwb->set_access_sector_mask(evicted.sector_mask);
+             //   printf("RD_hit_base: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), mwb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+           }
+            else{
+                mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
                 m_wrbk_type,evicted.m_modified_size,true);
                 wb->set_access_sector_mask(evicted.sector_mask);
-            send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
+                send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+           }
         }
         return MISS;
     }
@@ -1500,7 +1510,10 @@ data_cache::wr_miss_wa_lazy_fetch_on_read( new_addr_type addr,
 		assert(m_status != HIT);
 		cache_block_t* block = m_tag_array->get_block(cache_index);
 		block->set_status(MODIFIED, mf->get_access_sector_mask());
-		if(m_status == HIT_RESERVED) {
+        if(mf->get_sid() == 0){
+           printf("WR_MISS_LAZY_FETCH_ON_READ: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), m_status);
+        }
+        if(m_status == HIT_RESERVED) {
 			block->set_ignore_on_fill(true, mf->get_access_sector_mask());
 			block->set_modified_on_fill(true, mf->get_access_sector_mask());
 		}
@@ -1508,19 +1521,33 @@ data_cache::wr_miss_wa_lazy_fetch_on_read( new_addr_type addr,
 		if(mf->get_access_byte_mask().count() == m_config.get_atom_sz())
 		{
 			block->set_m_readable(true, mf->get_access_sector_mask());
-		//} else
-		//{
-		//	block->set_m_readable(false, mf->get_access_sector_mask());
+		} else
+		{
+			block->set_m_readable(true, mf->get_access_sector_mask());
 		}
+
+      
 
 		if( m_status != RESERVATION_FAIL ){
 			   // If evicted block is modified and not a write-through
 			   // (already modified lower level)
 			   if( wb && (m_config.m_write_policy != WRITE_THROUGH) ) {
-				   mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
-					   m_wrbk_type,evicted.m_modified_size,true);
-                       wb->set_access_sector_mask(evicted.sector_mask);
-				   send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
+                    if(evicted.buffered_update == true){ 
+                mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                GLOBAL_ACC_R,evicted.m_modified_size,false);
+               
+                mwb->set_buffered_update();
+                mwb->set_access_sector_mask(evicted.sector_mask);
+               printf("WR_MISS_WB: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), mwb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+           }
+            else{
+                mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                m_wrbk_type,evicted.m_modified_size,true);
+                 printf("WR_MISS_WB 2: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), wb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
+                wb->set_access_sector_mask(evicted.sector_mask);
+                send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+           }
 			   }
 			   return MISS;
 		   }

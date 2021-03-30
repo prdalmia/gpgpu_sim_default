@@ -1709,7 +1709,7 @@ void ldst_unit::L1_latency_queue_cycle()
                }
            }
 */
-		   if ( status == HIT ) {
+		   if ( status == HIT || ((status == MISS || status == SECTOR_MISS) && mf_next->is_write())) {
                       //assert( !read_sent );
 			   l1_latency_queue[0] = NULL;
                if(mf_next->isatomic()){
