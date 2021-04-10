@@ -1538,16 +1538,14 @@ data_cache::wr_miss_wa_lazy_fetch_on_read( new_addr_type addr,
                
                 mwb->set_buffered_update();
                 mwb->set_access_sector_mask(evicted.sector_mask);
-               printf("WR_MISS_WB: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), mwb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
                send_write_request(mwb, READ_REQUEST_SENT, time, events);
-           }
-            else{
+        }
+        else{
                 mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
-                m_wrbk_type,evicted.m_modified_size,true);
-                 printf("WR_MISS_WB 2: Sending eviction request for addr %x with size %d from core %d and sector mask is %d derived from %d and incoming mask is %d \n",evicted.m_block_addr, evicted.m_modified_size, mf->get_sid(), wb->get_access_sector_mask(), evicted.sector_mask, mf->get_access_sector_mask());
+                m_wrbk_type,evicted.m_modified_size,true);            
                 wb->set_access_sector_mask(evicted.sector_mask);
                 send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
-           }
+        }
 			   }
 			   return MISS;
 		   }
