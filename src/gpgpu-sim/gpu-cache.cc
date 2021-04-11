@@ -1510,9 +1510,6 @@ data_cache::wr_miss_wa_lazy_fetch_on_read( new_addr_type addr,
 		assert(m_status != HIT);
 		cache_block_t* block = m_tag_array->get_block(cache_index);
 		block->set_status(MODIFIED, mf->get_access_sector_mask());
-        if(mf->get_sid() == 0){
-           printf("WR_MISS_LAZY_FETCH_ON_READ: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), m_status);
-        }
         if(m_status == HIT_RESERVED) {
 			block->set_ignore_on_fill(true, mf->get_access_sector_mask());
 			block->set_modified_on_fill(true, mf->get_access_sector_mask());
