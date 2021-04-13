@@ -1578,6 +1578,9 @@ void gpgpu_sim::cycle()
             mem_fetch* mf = m_memory_sub_partition[i]->top();
             if (mf) {
                 unsigned response_size = mf->get_is_write()?mf->get_ctrl_size():mf->size();
+                 if(mf && mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
+           printf("WR_MISS_FETCH_ON_WRITE Going out of GPU_sim: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d and mf is %x\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type(), mf );
+              }
                 if ( ::icnt_has_buffer( m_shader_config->mem2device(i), response_size ) ) {
                     //if (!mf->get_is_write())
                        mf->set_return_timestamp(gpu_sim_cycle+gpu_tot_sim_cycle);
@@ -1618,7 +1621,7 @@ void gpgpu_sim::cycle()
           } else {
               mem_fetch* mf = (mem_fetch*) icnt_pop( m_shader_config->mem2device(i) );
               if(mf && mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
-printf("WR_MISS_FETCH_ON_WRITE in GPU_sim: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type());
+printf("WR_MISS_FETCH_ON_WRITE coming into GPU_sim: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d and mf is %x\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type(), mf);
               }
               m_memory_sub_partition[i]->push( mf, gpu_sim_cycle + gpu_tot_sim_cycle );
               if(mf)
