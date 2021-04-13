@@ -1397,10 +1397,20 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 			   // If evicted block is modified and not a write-through
 			   // (already modified lower level)
 			   if( wb && (m_config.m_write_policy != WRITE_THROUGH) ) {
-				   mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
-					   m_wrbk_type,evicted.m_modified_size,true);
-                       wb->set_access_sector_mask(evicted.sector_mask);
-				   send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
+				               if(evicted.buffered_update == true){ 
+                mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                GLOBAL_ACC_R,evicted.m_modified_size,false);
+               
+                mwb->set_buffered_update();
+                mwb->set_access_sector_mask(evicted.sector_mask);
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+        }
+        else{
+                mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                m_wrbk_type,evicted.m_modified_size,true);            
+                wb->set_access_sector_mask(evicted.sector_mask);
+                send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+        }
 			   }
 			   return MISS;
 		   }
@@ -1473,10 +1483,20 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 				// If evicted block is modified and not a write-through
 				// (already modified lower level)
 				if(wb && (m_config.m_write_policy != WRITE_THROUGH) ){
-					mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
-						m_wrbk_type,evicted.m_modified_size,true);
-                        wb->set_access_sector_mask(evicted.sector_mask);
-					send_write_request(wb, cache_event(WRITE_BACK_REQUEST_SENT, evicted), time, events);
+					            if(evicted.buffered_update == true){ 
+                mem_fetch *mwb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                GLOBAL_ACC_R,evicted.m_modified_size,false);
+               
+                mwb->set_buffered_update();
+                mwb->set_access_sector_mask(evicted.sector_mask);
+               send_write_request(mwb, READ_REQUEST_SENT, time, events);
+        }
+        else{
+                mem_fetch *wb = m_memfetch_creator->alloc(evicted.m_block_addr,
+                m_wrbk_type,evicted.m_modified_size,true);            
+                wb->set_access_sector_mask(evicted.sector_mask);
+                send_write_request(wb, WRITE_BACK_REQUEST_SENT, time, events);
+        }
 			}
 				return MISS;
 			}
