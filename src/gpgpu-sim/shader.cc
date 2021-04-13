@@ -2398,6 +2398,7 @@ void ldst_unit::cycle()
                        m_L1D->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                        if( mf->get_access_type() == L1_WR_ALLOC_R){
                            m_core->store_ack(mf);
+                           printf("WR_MISS_FETCH_ON_WRITE in shader: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count());
                           // delete mf;
                        }
                        m_response_fifo.pop_front();
