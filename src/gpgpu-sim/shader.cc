@@ -2298,6 +2298,7 @@ void ldst_unit::writeback()
                     
                 delete mf;
                 }
+                }
                 serviced_client = next_client; 
             }
             break;
