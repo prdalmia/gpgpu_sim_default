@@ -2288,7 +2288,7 @@ void ldst_unit::writeback()
                 mem_fetch *mf = m_L1D->next_access();
                 m_next_wb = mf->get_inst();
                 if(m_next_wb.isatomic()){
-                     printf("Do atomic: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and type is %d and access type is %d, is atomic1, isatomic2\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), mf->get_type(), mf->get_access_type(), m_next_wb.isatomic(), mf->isatomic() );
+                     printf("Do atomic: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and type is %d and access type is %d, is atomic1 %d, isatomic2 %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), mf->get_type(), mf->get_access_type(), m_next_wb.isatomic(), mf->isatomic() );
                     mf->do_atomic();
                     m_core->decrement_atomic_count(mf->get_wid(),mf->get_access_warp_mask().count());
                     }
