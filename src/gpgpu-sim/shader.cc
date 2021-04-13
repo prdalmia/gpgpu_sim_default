@@ -2286,13 +2286,18 @@ void ldst_unit::writeback()
         case 4: 
             if( m_L1D && m_L1D->access_ready() ) {
                 mem_fetch *mf = m_L1D->next_access();
+                if(mf->get_access_type() == L1_WR_ALLOC_R){
+                    delete mf;
+                }
+                else{
                 m_next_wb = mf->get_inst();
                 if(m_next_wb.isatomic() == 1){
                      printf("Do atomic: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and type is %d and access type is %d, is atomic1 %d, isatomic2 %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), mf->get_type(), mf->get_access_type(), m_next_wb.isatomic(), mf->isatomic() );
                     mf->do_atomic();
                     m_core->decrement_atomic_count(mf->get_wid(),mf->get_access_warp_mask().count());
-                    }
+                    
                 delete mf;
+                }
                 serviced_client = next_client; 
             }
             break;
@@ -2392,6 +2397,7 @@ void ldst_unit::cycle()
                        m_L1D->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                        if( mf->get_access_type() == L1_WR_ALLOC_R){
                            m_core->store_ack(mf);
+                           delete mf;
                        }
                        m_response_fifo.pop_front();
                    }
