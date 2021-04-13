@@ -1477,8 +1477,9 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 
 			cache_block_t* block = m_tag_array->get_block(cache_index);
 			block->set_modified_on_fill(true, mf->get_access_sector_mask());
+            if(mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
            printf("WR_MISS_FETCH_ON_WRITE 2: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), status);
-        
+            }
 
 			events.push_back(cache_event(WRITE_ALLOCATE_SENT));
 

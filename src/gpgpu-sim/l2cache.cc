@@ -407,7 +407,9 @@ void memory_sub_partition::cache_cycle( unsigned cycle )
             if ( !output_full && port_free ) {
                 std::list<cache_event> events;
                 enum cache_request_status status = m_L2cache->access(mf->get_addr(),mf,gpu_sim_cycle+gpu_tot_sim_cycle+m_memcpy_cycle_offset,events);
-                
+                if(mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
+printf("WR_MISS_FETCH_ON_WRITE in L2 cache: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type() , status);
+              }
        bool write_sent = was_write_sent(events);
                 bool read_sent = was_read_sent(events);
                 MEM_SUBPART_DPRINTF("Probing L2 cache Address=%llx, status=%u\n", mf->get_addr(), status); 

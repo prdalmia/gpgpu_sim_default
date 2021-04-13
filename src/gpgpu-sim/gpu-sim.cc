@@ -1617,6 +1617,9 @@ void gpgpu_sim::cycle()
              gpu_stall_dramfull++;
           } else {
               mem_fetch* mf = (mem_fetch*) icnt_pop( m_shader_config->mem2device(i) );
+              if(mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
+printf("WR_MISS_FETCH_ON_WRITE in L2 cache: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type());
+              }
               m_memory_sub_partition[i]->push( mf, gpu_sim_cycle + gpu_tot_sim_cycle );
               if(mf)
             	  partiton_reqs_in_parallel_per_cycle++;
