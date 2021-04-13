@@ -1387,7 +1387,10 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 		evicted_block_info evicted;
 
 		cache_request_status status =  m_tag_array->access(block_addr,time,cache_index,wb,evicted,mf);
-		assert(status != HIT);
+		if(mf->get_sid() == 0){
+           printf("WR_MISS_FETCH_ON_WRITE 1: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), status);
+        }
+        assert(status != HIT);
 		cache_block_t* block = m_tag_array->get_block(cache_index);
 		block->set_status(MODIFIED, mf->get_access_sector_mask());
 		if(status == HIT_RESERVED)
@@ -1476,6 +1479,8 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 
 			cache_block_t* block = m_tag_array->get_block(cache_index);
 			block->set_modified_on_fill(true, mf->get_access_sector_mask());
+           printf("WR_MISS_FETCH_ON_WRITE 2: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), status);
+        
 
 			events.push_back(cache_event(WRITE_ALLOCATE_SENT));
 

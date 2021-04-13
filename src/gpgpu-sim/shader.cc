@@ -1709,9 +1709,11 @@ void ldst_unit::L1_latency_queue_cycle()
                }
            }
 */
-		   if ( status == HIT || ((status == MISS || status == SECTOR_MISS) && mf_next->is_write())) {
+
+
+		   if ( status == HIT || (status != RESERVATION_FAIL && mf_next->is_write() && mf_next->get_access_byte_mask().count() == SECTOR_SIZE  ))  {
                       //assert( !read_sent );
-			   l1_latency_queue[0] = NULL;
+               l1_latency_queue[0] = NULL;
                if(mf_next->isatomic()){
                    mf_next->do_atomic();
                     m_core->decrement_atomic_count(mf_next->get_wid(),mf_next->get_access_warp_mask().count());
@@ -2355,7 +2357,7 @@ void ldst_unit::cycle()
                m_response_fifo.pop_front(); 
            }
        } else {
-    	   if( mf->get_type() == WRITE_ACK || ( m_config->gpgpu_perfect_mem && mf->get_is_write() )) {
+    	   if( mf->get_type() == WRITE_ACK || ( m_config->gpgpu_perfect_mem && mf->get_is_write()) ) {
                m_core->store_ack(mf);
                m_response_fifo.pop_front();
                delete mf;
@@ -2385,6 +2387,9 @@ void ldst_unit::cycle()
                } else {
                    if (m_L1D->fill_port_free()) {
                        m_L1D->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
+                       if( mf->get_access_type() == L1_WR_ALLOC_R){
+                           m_core->store_ack(mf->get_original_wr_mf());
+                       }
                        m_response_fifo.pop_front();
                    }
                }
@@ -3476,7 +3481,7 @@ void shader_core_ctx::accept_ldst_unit_response(mem_fetch * mf)
 
 void shader_core_ctx::store_ack( class mem_fetch *mf )
 {
-	assert( mf->get_type() == WRITE_ACK  || ( m_config->gpgpu_perfect_mem && mf->get_is_write() ) );
+	//assert( mf->get_type() == WRITE_ACK  || ( m_config->gpgpu_perfect_mem && mf->get_is_write() ) || mf->get_access_type() == L1_WR_ALLOC_R );
     unsigned warp_id = mf->get_wid();
     m_warp[warp_id].dec_store_req();
 }
