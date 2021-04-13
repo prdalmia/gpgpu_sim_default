@@ -2399,7 +2399,7 @@ void ldst_unit::cycle()
                        if( mf->get_access_type() == L1_WR_ALLOC_R){
                            m_core->store_ack(mf);
                            if(mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
-                           printf("WR_MISS_FETCH_ON_WRITE in L2 cache: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d and \n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type());
+                           printf("WR_MISS_FETCH_ON_WRITE in GPU_sim: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d and \n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type());
                            }
                           // delete mf;
                        }
