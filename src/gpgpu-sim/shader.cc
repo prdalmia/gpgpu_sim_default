@@ -2399,8 +2399,7 @@ void ldst_unit::cycle()
                        if( mf->get_access_type() == L1_WR_ALLOC_R){
                            unsigned dec_ack = (m_config->m_L1D_config.get_mshr_type() == SECTOR_ASSOC)?
 				   						(mf->get_original_wr_mf()->get_data_size()/SECTOR_SIZE) : 1;
-                            for(unsigned i=0; i< dec_ack; ++i)
-				            m_core->store_ack(mf);
+                            for(unsigned i=0; i< dec_ack; ++i) { m_core->store_ack(mf); }
                            if(mf->get_addr() == 0xc0004100 && mf->get_sid() == 0){
                            printf("WR_MISS_FETCH_ON_WRITE in shader: Write_miss_for_addr %x with size %d from core %d and type  is %d and access type is %d and \n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_type(), mf->get_access_type());
                            }
