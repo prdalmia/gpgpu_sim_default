@@ -1372,7 +1372,7 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 {
     new_addr_type block_addr = m_config.block_addr(addr);
     new_addr_type mshr_addr = m_config.mshr_addr(mf->get_addr());
-
+/*
 	if(mf->get_access_byte_mask().count() == m_config.get_atom_sz())
 	{
 		//if the request writes to the whole cache line/sector, then, write and set cache line Modified.
@@ -1387,9 +1387,6 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 		evicted_block_info evicted;
 
 		cache_request_status status =  m_tag_array->access(block_addr,time,cache_index,wb,evicted,mf);
-		if(mf->get_sid() == 0){
-           printf("WR_MISS_FETCH_ON_WRITE 1: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and status is %d\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), status);
-        }
         assert(status != HIT);
 		cache_block_t* block = m_tag_array->get_block(cache_index);
 		block->set_status(MODIFIED, mf->get_access_sector_mask());
@@ -1421,7 +1418,8 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 	}
 	else
 	{
-		bool mshr_hit = m_mshrs.probe(mshr_addr);
+	*/
+    	bool mshr_hit = m_mshrs.probe(mshr_addr);
 		bool mshr_avail = !m_mshrs.full(mshr_addr);
 		if(miss_queue_full(1)
 			|| (!(mshr_hit && mshr_avail)
@@ -1468,7 +1466,7 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 								mf);
 
 
-			new_addr_type block_addr = m_config.block_addr(addr);
+		   block_addr = m_config.block_addr(addr);
 			bool do_miss = false;
 			bool wb = false;
 			evicted_block_info evicted;
@@ -1506,7 +1504,7 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 				return MISS;
 			}
 	   return RESERVATION_FAIL;
-	}
+//	}
 }
 
 enum cache_request_status

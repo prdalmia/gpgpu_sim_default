@@ -1711,8 +1711,10 @@ void ldst_unit::L1_latency_queue_cycle()
 */
 
 
-		   if ( status == HIT || (status != RESERVATION_FAIL && mf_next->is_write() && mf_next->get_access_byte_mask().count() == SECTOR_SIZE  ))  {
+		   //if ( status == HIT || (status != RESERVATION_FAIL && mf_next->is_write() && mf_next->get_access_byte_mask().count() == SECTOR_SIZE  ))  {
+             
                       //assert( !read_sent );
+             if(status == HIT){
                l1_latency_queue[0] = NULL;
                if(mf_next->isatomic()){
                    mf_next->do_atomic();
@@ -2388,7 +2390,7 @@ void ldst_unit::cycle()
                    if (m_L1D->fill_port_free()) {
                        m_L1D->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                        if( mf->get_access_type() == L1_WR_ALLOC_R){
-                           m_core->store_ack(mf->get_original_wr_mf());
+                           m_core->store_ack(mf);
                        }
                        m_response_fifo.pop_front();
                    }
