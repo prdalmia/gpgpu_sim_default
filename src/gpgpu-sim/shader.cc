@@ -2397,7 +2397,7 @@ void ldst_unit::cycle()
                        m_L1D->fill(mf,gpu_sim_cycle+gpu_tot_sim_cycle);
                        if( mf->get_access_type() == L1_WR_ALLOC_R){
                            m_core->store_ack(mf);
-                           delete mf;
+                          // delete mf;
                        }
                        m_response_fifo.pop_front();
                    }
