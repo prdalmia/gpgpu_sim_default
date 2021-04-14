@@ -1444,7 +1444,7 @@ data_cache::wr_miss_wa_fetch_on_write( new_addr_type addr,
 
 		  //prevent Write - Read - Write in pending mshr
 		  //allowing another write will override the value of the first write, and the pending read request will read incorrect result from the second write
-		  if(m_mshrs.probe(mshr_addr) && m_mshrs.is_read_after_write_pending(mshr_addr) && mf->is_write())
+		  if((m_mshrs.probe(mshr_addr) && m_mshrs.is_read_after_write_pending(mshr_addr) && mf->is_write()) || (mshr_hit && mf->is_write()))
 		  {
 			  //assert(0);
 			  m_stats.inc_fail_stats(mf->get_access_type(), MSHR_RW_PENDING);
