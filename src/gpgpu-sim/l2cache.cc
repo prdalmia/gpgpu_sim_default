@@ -634,14 +634,16 @@ std::vector<mem_fetch*> memory_sub_partition::breakdown_request_to_sector_reques
 			    		mf->get_addr(), mf->get_access_sector_mask(), mf->get_data_size(), mf->isatomic(), mf->is_write());
 				assert(0 && "Undefined sector mask is received");
 			}
-
+        if(mf->get_access_type() == L1_WR_ALLOC_R){
+                delete mf->get_original_wr_mf();
+            }
 		std::bitset<SECTOR_SIZE*SECTOR_CHUNCK_SIZE> byte_sector_mask;
 		byte_sector_mask.reset();
 		for(unsigned  k=start*SECTOR_SIZE; k< SECTOR_SIZE; ++k)
 			byte_sector_mask.set(k);
 
 		for(unsigned j=start, i=0; j<= end ; ++j, ++i){
-
+              
 			const mem_access_t *ma = new  mem_access_t( mf->get_access_type(),
 									mf->get_addr() + SECTOR_SIZE*i,
 									SECTOR_SIZE,
