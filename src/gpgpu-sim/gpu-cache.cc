@@ -1171,7 +1171,7 @@ void baseline_cache::send_read_request(new_addr_type addr, new_addr_type block_a
     bool mshr_hit = m_mshrs.probe(mshr_addr);
     bool mshr_avail = !m_mshrs.full(mshr_addr);
     if( mf->get_sid() == 0 && mf->get_addr() == 0xc0004100 ){
-           printf("WR_MISS_FETCH_ON_WRITE Sending Read_MISS: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and mshr_hit is %d ad mshr_avail is %d is %d and mf is %x\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), mshr_hit, mshr_avail, mf);
+           printf("WR_MISS_FETCH_ON_WRITE Sending Read_MISS: Write_miss_for_addr %x with size %d from core %d and sector mask is %d and count is %d and mshr_hit is %d ad mshr_avail is %d and mf is %x\n", mf->get_addr(), mf->get_access_size() ,  mf->get_sid(), mf->get_access_sector_mask(), mf->get_access_byte_mask().count(), mshr_hit, mshr_avail, mf);
             }
     if ( mshr_hit && mshr_avail ) {
     	if(read_only)
