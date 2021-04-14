@@ -2288,17 +2288,15 @@ void ldst_unit::writeback()
                 mem_fetch *mf = m_L1D->next_access();
                 if(mf->get_access_type() == L1_WR_ALLOC_R){
                     delete mf->get_original_wr_mf();
-                    delete mf;
                 }
                 else{
                 m_next_wb = mf->get_inst();
                 if(m_next_wb.isatomic() == 1){
                     mf->do_atomic();
                     m_core->decrement_atomic_count(mf->get_wid(),mf->get_access_warp_mask().count());
-                    
+                }
+                }
                 delete mf;
-                }
-                }
                 serviced_client = next_client; 
             }
             break;
