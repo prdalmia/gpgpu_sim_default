@@ -243,6 +243,7 @@ public:
 
     unsigned get_dynamic_warp_id() const { return m_dynamic_warp_id; }
     unsigned get_warp_id() const { return m_warp_id; }
+    
 
 private:
     static const unsigned IBUFFER_SIZE=2;
@@ -1258,6 +1259,8 @@ public:
     void get_L1D_sub_stats(struct cache_sub_stats &css) const;
     void get_L1C_sub_stats(struct cache_sub_stats &css) const;
     void get_L1T_sub_stats(struct cache_sub_stats &css) const;
+    void printDivergenceHistogram(FILE *fout);
+    std::map<address_type, int> divergence_map;
 
 protected:
     ldst_unit( mem_fetch_interface *icnt,
@@ -1778,6 +1781,7 @@ public:
     void cycle();
     void reinit(unsigned start_thread, unsigned end_thread, bool reset_not_completed );
     void issue_block2core( class kernel_info_t &kernel );
+    void printDivergenceHistogram( FILE *fout ){m_ldst_unit->printDivergenceHistogram(fout);}
 
     void cache_flush();
     void cache_invalidate();
@@ -2107,6 +2111,9 @@ public:
 
     void get_icnt_stats(long &n_simt_to_mem, long &n_mem_to_simt) const;
     float get_current_occupancy( unsigned long long& active, unsigned long long & total ) const;
+    void printDivergenceHistogram(FILE *fout){
+      m_core[0]->printDivergenceHistogram(fout);
+    }
 
 private:
     unsigned m_cluster_id;
