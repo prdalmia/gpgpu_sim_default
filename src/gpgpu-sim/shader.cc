@@ -1687,6 +1687,7 @@ void ldst_unit::L1_latency_queue_cycle()
     {
 		    mem_fetch* mf_next = l1_latency_queue[0];
 			std::list<cache_event> events;
+            this->divergence_map[(mf_next->get_addr() & ~(new_addr_type)(127))]++ ;
 			enum cache_request_status status = m_L1D->access(mf_next->get_addr(),mf_next,gpu_sim_cycle+gpu_tot_sim_cycle,events);
 
 		   bool write_sent = was_write_sent(events);
@@ -1805,6 +1806,7 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
            stall_cond = ICNT_RC_FAIL;
        } else {
            mem_fetch *mf = m_mf_allocator->alloc(inst,access);
+           this->divergence_map[(mf->get_addr() & ~(new_addr_type)(127))]++ ;
            m_icnt->push(mf);
            inst.accessq_pop_back();
            //inst.clear_active( access.get_warp_mask() );
@@ -2609,6 +2611,8 @@ void gpgpu_sim::shader_print_cache_stats( FILE *fout ) const{
         fprintf(fout, "\tL1T_total_cache_pending_hits = %llu\n", total_css.pending_hits);
         fprintf(fout, "\tL1T_total_cache_reservation_fails = %llu\n", total_css.res_fails);
     }
+
+    m_cluster[0]->printDivergenceHistogram(fout);
 }
 
 void gpgpu_sim::shader_print_l1_miss_stat( FILE *fout ) const
@@ -2770,6 +2774,50 @@ void shader_core_ctx::display_simt_state(FILE *fout, int mask ) const
        }
        fprintf(fout,"\n");
     }
+}
+
+void ldst_unit::printDivergenceHistogram(FILE *fout) 
+{
+    fprintf(fout,"*************************************************************************\n");
+    fprintf(fout,"Printing Divergence Histogram\n");
+    int bin_0_10 = 0;
+    int bin_10_20 = 0;
+    int bin_20_30 = 0;
+    int bin_30_40 = 0;
+    int bin_40_50 = 0;
+    int bin_50_60 = 0;
+    int bin_60_70 = 0;
+    int bin_70_80 = 0;
+    int bin_80_end = 0;
+    int unknown = 0;
+
+    for(auto i = divergence_map.begin();  i != divergence_map.end(); i++ ){
+
+     if( i->second < 10){bin_0_10++;}
+     else if (i->second > 10 &&  i->second < 20 ) {bin_10_20++;}
+     else if (i->second > 20 &&  i->second < 30 ) {bin_20_30++;}
+     else if (i->second > 30 &&  i->second < 40 ) {bin_30_40++;}
+     else if (i->second > 40 &&  i->second < 50 ) {bin_40_50++;}
+     else if (i->second > 50 &&  i->second < 60 ) {bin_50_60++;}
+     else if (i->second > 60 &&  i->second < 70 ) {bin_60_70++;}
+     else if (i->second > 70 &&  i->second < 80 ) {bin_70_80++;}
+     else if (i->second > 80) {bin_80_end++;}
+     else{ unknown ++;}
+    }
+     fprintf(fout,"  Accesses 0 - 10    [%d]\n", bin_0_10 );
+     fprintf(fout,"  Accesses 10 - 20   [%d]\n", bin_10_20 );
+     fprintf(fout,"  Accesses 20 - 30   [%d]\n", bin_20_30 );
+     fprintf(fout,"  Accesses 30 - 40   [%d]\n", bin_30_40 );
+     fprintf(fout,"  Accesses 40 - 50   [%d]\n", bin_40_50 );
+     fprintf(fout,"  Accesses 50 - 60   [%d]\n", bin_50_60 );
+     fprintf(fout,"  Accesses 60 - 70   [%d]\n", bin_60_70 );
+     fprintf(fout,"  Accesses 70 - 80   [%d]\n", bin_70_80 );
+     fprintf(fout,"  Accesses 80+       [%d]\n", bin_80_end );
+     fprintf(fout,"  Accesses UNKNOWN   [%d]\n", unknown ); 
+
+     fprintf(fout,"*************************************************************************\n");
+
+    
 }
 
 void ldst_unit::print(FILE *fout) const
