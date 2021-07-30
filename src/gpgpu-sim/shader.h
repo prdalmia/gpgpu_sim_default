@@ -1260,6 +1260,17 @@ public:
     void get_L1C_sub_stats(struct cache_sub_stats &css) const;
     void get_L1T_sub_stats(struct cache_sub_stats &css) const;
     void printDivergenceHistogram(FILE *fout);
+    void addToHistogram(size_t i); 
+    int bin_0_10 = 0;
+    int bin_10_20 = 0;
+    int bin_20_30 = 0;
+    int bin_30_40 = 0;
+    int bin_40_50 = 0;
+    int bin_50_60 = 0;
+    int bin_60_70 = 0;
+    int bin_70_80 = 0;
+    int bin_80_end = 0;
+    int unknown = 0;
     std::map<address_type, int> divergence_map;
 
 protected:

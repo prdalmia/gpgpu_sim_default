@@ -1788,6 +1788,10 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
    assert( !inst.accessq_empty() );
    mem_stage_stall_type stall_cond = NO_RC_FAIL;
    const mem_access_t &access = inst.accessq_back();
+   if(inst.isatomic()){
+
+       addToHistogram(inst.accessq_count());
+   }
 
    bool bypassL1D = false; 
    if ( CACHE_GLOBAL == inst.cache_op || (m_L1D == NULL) ) {
@@ -2776,34 +2780,24 @@ void shader_core_ctx::display_simt_state(FILE *fout, int mask ) const
 }
 
 
-void ldst_unit::printDivergenceHistogram(FILE *fout) 
+
+void ldst_unit::addToHistogram(size_t i) 
 {
-    fprintf(fout,"*************************************************************************\n");
-    fprintf(fout,"Printing Divergence Histogram\n");
-    int bin_0_10 = 0;
-    int bin_10_20 = 0;
-    int bin_20_30 = 0;
-    int bin_30_40 = 0;
-    int bin_40_50 = 0;
-    int bin_50_60 = 0;
-    int bin_60_70 = 0;
-    int bin_70_80 = 0;
-    int bin_80_end = 0;
-    int unknown = 0;
-
-    for(auto i = divergence_map.begin();  i != divergence_map.end(); i++ ){
-
-     if( i->second < 10){bin_0_10++;}
-     else if (i->second > 10 &&  i->second < 20 ) {bin_10_20++;}
-     else if (i->second > 20 &&  i->second < 30 ) {bin_20_30++;}
-     else if (i->second > 30 &&  i->second < 40 ) {bin_30_40++;}
-     else if (i->second > 40 &&  i->second < 50 ) {bin_40_50++;}
-     else if (i->second > 50 &&  i->second < 60 ) {bin_50_60++;}
-     else if (i->second > 60 &&  i->second < 70 ) {bin_60_70++;}
-     else if (i->second > 70 &&  i->second < 80 ) {bin_70_80++;}
-     else if (i->second > 80) {bin_80_end++;}
+     if( i < 10){bin_0_10++;}
+     else if (i > 10 &&  i < 20 ) {bin_10_20++;}
+     else if (i > 20 &&  i < 30 ) {bin_20_30++;}
+     else if (i > 30 &&  i < 40 ) {bin_30_40++;}
+     else if (i > 40 &&  i < 50 ) {bin_40_50++;}
+     else if (i > 50 &&  i < 60 ) {bin_50_60++;}
+     else if (i > 60 &&  i < 70 ) {bin_60_70++;}
+     else if (i > 70 &&  i < 80 ) {bin_70_80++;}
+     else if (i > 80) {bin_80_end++;}
      else{ unknown ++;}
     }
+
+void ldst_unit::printDivergenceHistogram(FILE *fout) 
+{
+    fprintf(fout,"**************************Divergence Histogram***************************\n");
      fprintf(fout,"  Accesses 0 - 10    [%d]\n", bin_0_10 );
      fprintf(fout,"  Accesses 10 - 20   [%d]\n", bin_10_20 );
      fprintf(fout,"  Accesses 20 - 30   [%d]\n", bin_20_30 );
