@@ -700,6 +700,11 @@ public:
     	//set new assoc. L1 cache dynamically resized in Volta
     	m_assoc = n;
 	}
+    unsigned get_assoc()
+	{
+    	//return assoc L1 cache 
+    	return (m_assoc);
+	}
     unsigned get_nset() const
 	{
 		assert( m_valid );

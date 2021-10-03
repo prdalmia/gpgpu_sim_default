@@ -3028,6 +3028,7 @@ unsigned int shader_core_config::max_cta( const kernel_info_t &k ) const
     		else
     			assert(0);
 
+                m_L1D_config.set_assoc(m_L1D_config.get_assoc() - 4);
     		 printf ("GPGPU-Sim: Reconfigure L1 cache in Volta Archi to %uKB\n", m_L1D_config.get_total_size_inKB());
     	}
 
