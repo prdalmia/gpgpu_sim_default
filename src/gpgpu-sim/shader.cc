@@ -2615,7 +2615,7 @@ void gpgpu_sim::shader_print_cache_stats( FILE *fout ) const{
         fprintf(fout, "\tL1T_total_cache_pending_hits = %llu\n", total_css.pending_hits);
         fprintf(fout, "\tL1T_total_cache_reservation_fails = %llu\n", total_css.res_fails);
     }
-    m_cluster[0]->printDivergenceHistogram(fout);
+    //m_cluster[0]->printDivergenceHistogram(fout);
 }
 
 void gpgpu_sim::shader_print_l1_miss_stat( FILE *fout ) const
