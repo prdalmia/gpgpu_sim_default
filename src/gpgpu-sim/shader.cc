@@ -1790,10 +1790,13 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
    const mem_access_t &access = inst.accessq_back();
    if(inst.isatomic() ){
        std::reference_wrapper<warp_inst_t> y = inst;
-       if(inst_track_map.count(y) == 0){
-            inst_track_map[y] = inst.accessq_count() - 1;
-       }
-   }
+        if(inst_track_map.count(y) == 0){
+            inst_track_map[y] = std::make_pair( inst.accessq_count() , 0);
+        }
+        else if (inst_track_map.count(y) == 1 ){
+            inst_track_map[y].second = inst_track_map[y].second | access.get_sector_mask();
+        }
+   }  
 
    bool bypassL1D = false; 
    if ( CACHE_GLOBAL == inst.cache_op || (m_L1D == NULL) ) {
@@ -1818,7 +1821,7 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
            inst.accessq_pop_back();
        std::reference_wrapper<warp_inst_t> x = inst;
            if(inst.accessq_empty() && inst.isatomic()){
-                total_collisions += inst_track_map[x];
+                total_collisions += inst_track_map[x].first - inst_track_map[x].second.count() ;
                 inst_track_map.erase(x);
             }
            //inst.clear_active( access.get_warp_mask() );

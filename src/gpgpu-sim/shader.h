@@ -1340,7 +1340,7 @@ protected:
    // for debugging
    unsigned long long m_last_inst_gpu_sim_cycle;
    unsigned long long m_last_inst_gpu_tot_sim_cycle;
-   std::map<warp_inst_t, int> inst_track_map;
+   std::unordered_map<const warp_inst_t& , std::pair<int, mem_access_sector_mask_t> >  inst_track_map;
    int total_collisions;
    std::deque<mem_fetch* > l1_latency_queue;
    void L1_latency_queue_cycle();
