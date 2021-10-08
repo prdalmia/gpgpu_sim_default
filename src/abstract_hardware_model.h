@@ -975,7 +975,7 @@ public:
 
     bool operator <(const warp_inst_t& rhs ) const
     {
-        return this->m_uid < rhs.m_uid;
+        return this->m_warp_id < rhs.m_warp_id;
     }
 
     // modifiers
