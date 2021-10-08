@@ -1791,7 +1791,7 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
    if(inst.isatomic() ){
        std::reference_wrapper<warp_inst_t> y = inst;
         if(inst_track_map.count(y) == 0){
-            inst_track_map[y] = std::make_pair( inst.accessq_count() , 0);
+            inst_track_map[y] = std::make_pair( inst.accessq_count() , access.get_sector_mask());
         }
         else if (inst_track_map.count(y) == 1 ){
             inst_track_map[y].second = inst_track_map[y].second | access.get_sector_mask();
