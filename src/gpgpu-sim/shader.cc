@@ -1816,10 +1816,10 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
            
            m_icnt->push(mf);
            inst.accessq_pop_back();
-       std::reference_wrapper<warp_inst_t> y = inst;
+       std::reference_wrapper<warp_inst_t> x = inst;
            if(inst.accessq_empty() && inst.isatomic()){
-                total_collisions += inst_track_map[y];
-                inst_track_map.erase(y);
+                total_collisions += inst_track_map[x];
+                inst_track_map.erase(x);
             }
            //inst.clear_active( access.get_warp_mask() );
            if( inst.is_load() ) { 
