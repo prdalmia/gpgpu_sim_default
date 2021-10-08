@@ -1788,9 +1788,10 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
    assert( !inst.accessq_empty() );
    mem_stage_stall_type stall_cond = NO_RC_FAIL;
    const mem_access_t &access = inst.accessq_back();
-   if(inst.isatomic()){
-
-       addToHistogram(inst.accessq_count());
+   if(inst.isatomic() ){
+       if(inst_track_map.count(inst) == 0){
+            inst_track_map[inst] = inst.accessq_count() - 1;
+       }
    }
 
    bool bypassL1D = false; 
@@ -1810,9 +1811,14 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
            stall_cond = ICNT_RC_FAIL;
        } else {
            mem_fetch *mf = m_mf_allocator->alloc(inst,access);
-           this->divergence_map[(mf->get_addr() & ~(new_addr_type)(127))]++ ;
+           //this->divergence_map[(mf->get_addr() & ~(new_addr_type)(127))]++ ;
+           
            m_icnt->push(mf);
            inst.accessq_pop_back();
+           if(inst.accessq_empty() && inst.isatomic()){
+                total_collisions += inst_track_map[inst];
+                inst_track_map.erase(inst);
+            }
            //inst.clear_active( access.get_warp_mask() );
            if( inst.is_load() ) { 
               for( unsigned r=0; r < MAX_OUTPUT_VALUES; r++) 
@@ -2542,7 +2548,14 @@ void gpgpu_sim::shader_print_cache_stats( FILE *fout ) const{
     if(!m_shader_config->m_L1I_config.disabled()){
         total_css.clear();
         css.clear();
+        int collisions = 0;
         fprintf(fout, "\n========= Core cache stats =========\n");
+        fprintf(fout, "Atomic collisions");
+        for ( unsigned i = 0; i < m_shader_config->n_simt_clusters; ++i ) {
+            collisions += m_cluster[i]->get_atomic_collisions();
+            
+        }
+        fprintf(fout, "\ttotal_atomic_collisions = %d\n", collisions);
         fprintf(fout, "L1I_cache:\n");
         for ( unsigned i = 0; i < m_shader_config->n_simt_clusters; ++i ) {
             m_cluster[i]->get_L1I_sub_stats(css);
@@ -3473,6 +3486,11 @@ void shader_core_ctx::get_L1I_sub_stats(struct cache_sub_stats &css) const{
 void shader_core_ctx::get_L1D_sub_stats(struct cache_sub_stats &css) const{
     m_ldst_unit->get_L1D_sub_stats(css);
 }
+
+int shader_core_ctx::get_atomic_collisions(){
+    return m_ldst_unit->get_atomic_collisions();
+}
+
 void shader_core_ctx::get_L1C_sub_stats(struct cache_sub_stats &css) const{
     m_ldst_unit->get_L1C_sub_stats(css);
 }
@@ -4130,6 +4148,14 @@ void simt_core_cluster::get_L1T_sub_stats(struct cache_sub_stats &css) const{
     css = total_css;
 }
 
+int simt_core_cluster::get_atomic_collisions(){
+    int total_collisions = 0;
+    for ( unsigned i = 0; i < m_config->n_simt_cores_per_cluster; ++i ) {
+        
+        total_collisions += m_core[i]->get_atomic_collisions();
+    }
+    return total_collisions;
+}
 void shader_core_ctx::checkExecutionStatusAndUpdate(warp_inst_t &inst, unsigned t, unsigned tid)
 {
     if(inst.isatomic())

@@ -35,6 +35,7 @@
 #include <assert.h>
 #include <map>
 #include <set>
+#include <unordered_map>
 #include <vector>
 #include <list>
 #include <bitset>
@@ -1259,6 +1260,7 @@ public:
     void get_L1D_sub_stats(struct cache_sub_stats &css) const;
     void get_L1C_sub_stats(struct cache_sub_stats &css) const;
     void get_L1T_sub_stats(struct cache_sub_stats &css) const;
+    int get_atomic_collisions() {return total_collisions;}
     void printDivergenceHistogram(FILE *fout);
     void addToHistogram(size_t i); 
     int bin_0_10 = 0;
@@ -1338,7 +1340,8 @@ protected:
    // for debugging
    unsigned long long m_last_inst_gpu_sim_cycle;
    unsigned long long m_last_inst_gpu_tot_sim_cycle;
-
+   std::unordered_map<const warp_inst_t& , int> inst_track_map;
+   int total_collisions;
    std::deque<mem_fetch* > l1_latency_queue;
    void L1_latency_queue_cycle();
 };
@@ -1847,6 +1850,7 @@ public:
     void get_L1D_sub_stats(struct cache_sub_stats &css) const;
     void get_L1C_sub_stats(struct cache_sub_stats &css) const;
     void get_L1T_sub_stats(struct cache_sub_stats &css) const;
+    int get_atomic_collisions ();
 
     void get_icnt_power_stats(long &n_simt_to_mem, long &n_mem_to_simt) const;
 
@@ -2119,6 +2123,7 @@ public:
     void get_L1D_sub_stats(struct cache_sub_stats &css) const;
     void get_L1C_sub_stats(struct cache_sub_stats &css) const;
     void get_L1T_sub_stats(struct cache_sub_stats &css) const;
+    int get_atomic_collisions();
 
     void get_icnt_stats(long &n_simt_to_mem, long &n_mem_to_simt) const;
     float get_current_occupancy( unsigned long long& active, unsigned long long & total ) const;
