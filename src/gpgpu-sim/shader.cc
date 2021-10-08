@@ -1789,8 +1789,9 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
    mem_stage_stall_type stall_cond = NO_RC_FAIL;
    const mem_access_t &access = inst.accessq_back();
    if(inst.isatomic() ){
-       if(inst_track_map.count(inst) == 0){
-            inst_track_map[inst] = inst.accessq_count() - 1;
+       std::reference_wrapper<warp_inst_t> y = inst;
+       if(inst_track_map.count(y) == 0){
+            inst_track_map[y] = inst.accessq_count() - 1;
        }
    }
 
@@ -1815,9 +1816,10 @@ bool ldst_unit::memory_cycle( warp_inst_t &inst, mem_stage_stall_type &stall_rea
            
            m_icnt->push(mf);
            inst.accessq_pop_back();
+       std::reference_wrapper<warp_inst_t> y = inst;
            if(inst.accessq_empty() && inst.isatomic()){
-                total_collisions += inst_track_map[inst];
-                inst_track_map.erase(inst);
+                total_collisions += inst_track_map[y];
+                inst_track_map.erase(y);
             }
            //inst.clear_active( access.get_warp_mask() );
            if( inst.is_load() ) { 
