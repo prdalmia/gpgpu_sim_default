@@ -973,6 +973,11 @@ public:
     virtual ~warp_inst_t(){
     }
 
+    bool operator <(const warp_inst_t& rhs ) const
+    {
+        return this->m_uid < rhs.m_uid;
+    }
+
     // modifiers
     void broadcast_barrier_reduction( const active_mask_t& access_mask);
     void do_atomic(bool forceDo=false);
